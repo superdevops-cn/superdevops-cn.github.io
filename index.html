@@ -145,19 +145,102 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-Spring _Cloud_ 01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Spring_Cloud_02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/13/Spring _Cloud_ 01/">Spring Cloud-01 开始使用微服务</a>
+      <a class="article-title" href="/2019/11/17/Spring_Cloud_02/">Spring Cloud-02 微服务注册与发现Eureka</a>
     </h1>
   
 
         
-        <a href="/2019/11/13/Spring _Cloud_ 01/" class="archive-article-date">
+        <a href="/2019/11/17/Spring_Cloud_02/" class="archive-article-date">
+  	<time datetime="2019-11-17T03:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- JDK：Spring Cloud官方建议使用JDK <span class="number">1.8</span>;</span><br><span class="line">- Spring Boot：笔者使用Spring Boot <span class="number">2.1</span>.10.RELEASE;</span><br><span class="line">- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3</span><br><span class="line">- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span><br><span class="line">- Maven：笔者使用Maven <span class="number">3.6</span>.1构建项目；</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-服务发现简介"><a href="#1-服务发现简介" class="headerlink" title="1.服务发现简介"></a>1.服务发现简介</h3><p>​         通过上一篇博客的讲解，我们知道硬编码提供者地址的方式有不少问题。要想解决这些问题，服务消费者需要一个强大的服务发现机制，服务消费者使用这种机制获取服务提供者的网络信息。不仅如此，即使服务提供者的信息发生变化，服务消费者也无须修改配置文件。 </p>
+<p>​        服务发现组件提供这种能力。在微服务架构中，服务发现组件是一个非常关键的组件。</p>
+        
+          <a class="article-more-a" href="/2019/11/17/Spring_Cloud_02/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">SpringCloud</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Eureka</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/11/17/Spring_Cloud_02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Spring _Cloud_01" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/13/Spring _Cloud_01/">Spring Cloud-01 开始使用微服务</a>
+    </h1>
+  
+
+        
+        <a href="/2019/11/13/Spring _Cloud_01/" class="archive-article-date">
   	<time datetime="2019-11-13T02:29:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-13</time>
 </a>
         
@@ -169,7 +252,7 @@
 
 <h3 id="1-Spring-Cloud使用的前提"><a href="#1-Spring-Cloud使用的前提" class="headerlink" title="1.Spring Cloud使用的前提"></a>1.Spring Cloud使用的前提</h3><p>​     Spring Cloud 不一定适合所有人，想要玩转Spring Cloud 需要具备什么的技术能力，以及在实战中会使用哪些工具。</p>
         
-          <a class="article-more-a" href="/2019/11/13/Spring _Cloud_ 01/#more">more >></a>
+          <a class="article-more-a" href="/2019/11/13/Spring _Cloud_01/#more">more >></a>
         
       
 
@@ -193,7 +276,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/13/Spring _Cloud_ 01/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/11/13/Spring _Cloud_01/">展开全文 >></a>
         </p>
       
 
@@ -313,6 +396,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">SpringCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
             
             <div class="clearfix"></div>

@@ -6,19 +6,35 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019/11 | Java橙序猿</title>
+  <title>Spring Cloud-01 开始使用微服务 | Java橙序猿</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="世界上没有难学的技术，只有不去学习的懒人。">
-<meta name="keywords" content="IO,JVM,JUC,Java,Docker,Github,Hexo">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Java橙序猿">
-<meta property="og:url" content="http://yoursite.com/archives/2019/11/index.html">
+  <meta name="description" content="0.说在前面12345- JDK：Spring Cloud官方建议使用JDK 1.8。- Spring Boot：笔者使用Spring Boot 2.1.10.RELEASE- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3;- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；- Maven：笔者使用Maven 3.6">
+<meta name="keywords" content="SpringCloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Cloud-01 开始使用微服务">
+<meta property="og:url" content="http://yoursite.com/2019/11/13/Spring _Cloud_01/index.html">
 <meta property="og:site_name" content="Java橙序猿">
-<meta property="og:description" content="世界上没有难学的技术，只有不去学习的懒人。">
+<meta property="og:description" content="0.说在前面12345- JDK：Spring Cloud官方建议使用JDK 1.8。- Spring Boot：笔者使用Spring Boot 2.1.10.RELEASE- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3;- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；- Maven：笔者使用Maven 3.6">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191113214123622.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191113215322376.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191113215820445.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191114191207504.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191113220404252.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191114193448063.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191116213057227.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191116213243818.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191116235956434.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191116235837020.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191116235215043.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191117002302313.png">
+<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191117002651887.png">
+<meta property="og:image" content="http://yoursite.com/image/common/superdevops.jpg">
+<meta property="og:updated_time" content="2020-02-23T09:10:46.472Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java橙序猿">
-<meta name="twitter:description" content="世界上没有难学的技术，只有不去学习的懒人。">
+<meta name="twitter:title" content="Spring Cloud-01 开始使用微服务">
+<meta name="twitter:description" content="0.说在前面12345- JDK：Spring Cloud官方建议使用JDK 1.8。- Spring Boot：笔者使用Spring Boot 2.1.10.RELEASE- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3;- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；- Maven：笔者使用Maven 3.6">
+<meta name="twitter:image" content="http://yoursite.com/image/SpringCloud/image-20191113214123622.png">
   
  
 
@@ -143,78 +159,225 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Spring _Cloud_01" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/11/17/Spring_Cloud_02/" class="archive-article-date">
-  	<time datetime="2019-11-17T03:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-17</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/17/Spring_Cloud_02/">Spring Cloud-02 微服务注册与发现Eureka</a>
+    <h1 class="article-title" itemprop="name">
+      Spring Cloud-01 开始使用微服务
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">SpringCloud</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Eureka</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/11/13/Spring _Cloud_01/" class="archive-article-date">
+        
+        <a href="/2019/11/13/Spring _Cloud_01/" class="archive-article-date">
   	<time datetime="2019-11-13T02:29:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-13</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/13/Spring _Cloud_01/">Spring Cloud-01 开始使用微服务</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- JDK：Spring Cloud官方建议使用JDK <span class="number">1.8</span>。</span><br><span class="line">- Spring Boot：笔者使用Spring Boot <span class="number">2.1</span>.10.RELEASE</span><br><span class="line">- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3;</span><br><span class="line">- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span><br><span class="line">- Maven：笔者使用Maven <span class="number">3.6</span>.1构建项目；</span><br></pre></td></tr></table></figure>
 
-        <div class="article-info info-on-right">
-          
+<h3 id="1-Spring-Cloud使用的前提"><a href="#1-Spring-Cloud使用的前提" class="headerlink" title="1.Spring Cloud使用的前提"></a>1.Spring Cloud使用的前提</h3><p>​     Spring Cloud 不一定适合所有人，想要玩转Spring Cloud 需要具备什么的技术能力，以及在实战中会使用哪些工具。</p>
+<a id="more"></a>
+
+<h4 id="1-1-技术储备"><a href="#1-1-技术储备" class="headerlink" title="1.1 技术储备"></a>1.1 技术储备</h4><p>Spring Cloud 并不是面向零基础的开发人员，它有一定的学习曲线；</p>
+<ul>
+<li><p>语言基础：Spring Cloud是一个基于Java语言的工具套件，所以学习它需要一定的Java基础。当然，Spring Cloud同样也支持使用Scala、Groovy等语言进行开发。本书的示例代码都是使用Java编写的。</p>
+</li>
+<li><p>Spring Boot：SpringCloud是基于Spring Boot构建的，因此它延续了Spring Boot的契约模式以及开发方式。如果大家对Spring Boot不熟悉，建议花一点时间入门。</p>
+</li>
+<li><p>项目管理与构建工具：目前业界比较主流的项目管理与构建工具有Maven和Gradle等，本书采用的是目前相对主流的Maven。</p>
+<h4 id="1-2-工具及软件版本"><a href="#1-2-工具及软件版本" class="headerlink" title="1.2 工具及软件版本"></a>1.2 工具及软件版本</h4></li>
+<li><p>JDK：Spring Cloud官方建议使用JDK 1.8。</p>
+</li>
+<li><p>Spring Boot：笔者使用Spring Boot 2.2.1.RELEASE</p>
+</li>
+<li><p>Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3</p>
+</li>
+<li><p>IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</p>
+</li>
+<li><p>Maven：笔者使用Maven 3.6.1构建项目；</p>
+</li>
+</ul>
+<h3 id="2-服务提供者与服务消费者"><a href="#2-服务提供者与服务消费者" class="headerlink" title="2.服务提供者与服务消费者"></a>2.服务提供者与服务消费者</h3><p>使用微服务构建的是分布式系统，微服务之间通过网络进行通信。我们使用服务提供者与服务消费者来描述微服务之间的调用关系。</p>
+<ul>
+<li>服务提供者：服务的被调用方（为其他服务提供服务的服务）</li>
+<li>服务消费者：服务的调用方（依赖其他服务的服务）</li>
+</ul>
+<p>以一个电影售票系统为例，架构图如下所示：</p>
+<p><img src="/image/SpringCloud/image-20191113214123622.png" alt></p>
+<p>围绕该场景，先来编写一个用户微服务，然后编写一个电影微服务。</p>
+<h3 id="3-编写服务提供者"><a href="#3-编写服务提供者" class="headerlink" title="3.编写服务提供者"></a>3.编写服务提供者</h3><p>​    编写一个服务提供者（用户微服务），该服务可通过主键查询用户信息。为方便测试与代码的编写，使用Mybatis作为持久层框架并且使用，使用Mysql作为数据库。</p>
+<h4 id="3-1-使用-Spring-Initializr快速创建Spring-Boot项目（microservice-simple-provider-user）"><a href="#3-1-使用-Spring-Initializr快速创建Spring-Boot项目（microservice-simple-provider-user）" class="headerlink" title="3.1 使用 Spring Initializr快速创建Spring Boot项目（microservice-simple-provider-user）"></a>3.1 使用 Spring Initializr快速创建Spring Boot项目（microservice-simple-provider-user）</h4><ul>
+<li>使用IntelliJIDEA创建一个空的maven项目</li>
+<li>新建一个Moudule 选择Spring Initializr 如下图：</li>
+</ul>
+<p><img src="/image/SpringCloud/image-20191113215322376.png" alt></p>
+<ul>
+<li><p>Next 输入微服务的名字以及相关的信息</p>
+<p><img src="/image/SpringCloud/image-20191113215820445.png" alt></p>
+</li>
+<li><p>Next 选择需要的模块，Web，Mysql，JDBC，Mybatis和SpringBoot 2.1.10</p>
+</li>
+</ul>
+<p><img src="/image/SpringCloud/image-20191114191207504.png" alt></p>
+<ul>
+<li>Next 然后Finish</li>
+</ul>
+<p><img src="/image/SpringCloud/image-20191113220404252.png" alt></p>
+<p>  到此，项目创建就算成功了。</p>
+<h4 id="3-2-准备数据库脚本-在项目的classpath下建立schema-sql-并添加如下内容："><a href="#3-2-准备数据库脚本-在项目的classpath下建立schema-sql-并添加如下内容：" class="headerlink" title="3.2 准备数据库脚本,在项目的classpath下建立schema.sql,并添加如下内容："></a>3.2 准备数据库脚本,在项目的classpath下建立schema.sql,并添加如下内容：</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span>   <span class="keyword">user</span> ;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span></span><br><span class="line">(</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">bigint</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">40</span>) ,</span><br><span class="line">    age <span class="built_in">int</span>,</span><br><span class="line">    balance <span class="built_in">decimal</span>(<span class="number">10</span>,<span class="number">2</span>),</span><br><span class="line">    data_base <span class="built_in">varchar</span>(<span class="number">40</span>),</span><br><span class="line">    primary <span class="keyword">key</span> (<span class="keyword">id</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-准备几条数据-在项目的classpath下建立文件data-sql，并添加如下内容："><a href="#3-3-准备几条数据-在项目的classpath下建立文件data-sql，并添加如下内容：" class="headerlink" title="3.3 准备几条数据,在项目的classpath下建立文件data.sql，并添加如下内容："></a>3.3 准备几条数据,在项目的classpath下建立文件data.sql，并添加如下内容：</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span>(<span class="keyword">id</span>, <span class="keyword">name</span>, age, balance,data_base)<span class="keyword">VALUES</span>(<span class="number">1</span>, <span class="string">'张三'</span>, <span class="number">18</span>, <span class="number">100</span>,<span class="keyword">DATABASE</span>());</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span>(<span class="keyword">id</span>, <span class="keyword">name</span>, age, balance,data_base)<span class="keyword">VALUES</span>(<span class="number">2</span>, <span class="string">'李四'</span>, <span class="number">28</span>, <span class="number">200</span>,<span class="keyword">DATABASE</span>());</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span>(<span class="keyword">id</span>, <span class="keyword">name</span>, age, balance,data_base)<span class="keyword">VALUES</span>(<span class="number">3</span>, <span class="string">'王五'</span>, <span class="number">38</span>, <span class="number">300</span>,<span class="keyword">DATABASE</span>());</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-编写配置文件，命名为application-yml"><a href="#3-4-编写配置文件，命名为application-yml" class="headerlink" title="3.4 编写配置文件，命名为application.yml"></a>3.4 编写配置文件，命名为application.yml</h4><p>在传统的Web开发中，常使用properties格式文件作为配置文件。Spring Boot以及Spring Cloud支持使用properties或者yml格式的文件作为配置文件。</p>
+<p> yml文件格式是YAML（Yet Another Markup Language）编写的文件格式，YAML和properties格式的文件可互相转换，例如本节中的application.yml，就等价于如下的properties文件。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#服务端口</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">jdbc:mysql://192.168.10.21:3306/microservice01?useUnicode=true;characterEncoding=utf8;allowMultiQueries=true;autoReconnect=true</span></span><br><span class="line"><span class="attr">    driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"><span class="attr">    platform:</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">    schema:</span> <span class="attr">classpath:schema.sql</span></span><br><span class="line"><span class="attr">    data:</span> <span class="attr">classpath:data.sql</span></span><br><span class="line"><span class="attr">    initialization-mode:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line"><span class="attr">  mapper-locations:</span> <span class="string">classpath*:mapper/*Mapper.xml</span></span><br></pre></td></tr></table></figure>
+
+<p> 启动程序，会自动建表并且把数据入数据库。</p>
+<p>从中不难看出，YAML比properties结构清晰；可读性、可维护性也更强，并且语法非常简捷。因此，本书使用YAML格式作为配置文件。<strong>yml有严格的缩进，并且key与value之间使用</strong>:<strong>分隔，冒号后的空格不能少，请大家注意</strong>。</p>
+<h4 id="3-5使用-springboot-mybatis-generator自动生成代码"><a href="#3-5使用-springboot-mybatis-generator自动生成代码" class="headerlink" title="3.5使用 springboot + mybatis generator自动生成代码"></a>3.5使用 springboot + mybatis generator自动生成代码</h4><p>  为了方便后续的使用，单独写一个springboot项目来生成代码，具体步骤如下，</p>
+<ul>
+<li>选择Mysql，JDBC，Mybatis和SpringBoot 2.1.10；</li>
+</ul>
+<p><img src="/image/SpringCloud/image-20191114193448063.png" alt></p>
+<ul>
+<li><p>加入 mybatis generator自动生成代码插件 pom</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- mybatis generator 自动生成代码插件 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.generator<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-generator-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">configurationFile</span>&gt;</span>$&#123;basedir&#125;/src/main/resources/generatorConfig.xml<span class="tag">&lt;/<span class="name">configurationFile</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">overwrite</span>&gt;</span>true<span class="tag">&lt;/<span class="name">overwrite</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">verbose</span>&gt;</span>true<span class="tag">&lt;/<span class="name">verbose</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">version</span>&gt;</span>8.0.18<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li>在pom文件中配置的Mybatis-Generator 工具配置文件的位置新建一个generatorConfig.xml</li>
+</ul>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE generatorConfiguration</span></span><br><span class="line"><span class="meta">      PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"</span></span><br><span class="line"><span class="meta">        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">generatorConfiguration</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--加载配置文件，为下面读取数据库信息准备--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span> <span class="attr">resource</span>=<span class="string">"application.properties"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--defaultModelType="flat" 大数据字段，不分表 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context</span> <span class="attr">id</span>=<span class="string">"Mysql"</span> <span class="attr">targetRuntime</span>=<span class="string">"MyBatis3Simple"</span> <span class="attr">defaultModelType</span>=<span class="string">"flat"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"autoDelimitKeywords"</span> <span class="attr">value</span>=<span class="string">"true"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"beginningDelimiter"</span> <span class="attr">value</span>=<span class="string">"`"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"endingDelimiter"</span> <span class="attr">value</span>=<span class="string">"`"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"javaFileEncoding"</span> <span class="attr">value</span>=<span class="string">"utf-8"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span> <span class="attr">type</span>=<span class="string">"org.mybatis.generator.plugins.SerializablePlugin"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span> <span class="attr">type</span>=<span class="string">"org.mybatis.generator.plugins.ToStringPlugin"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 注释 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">commentGenerator</span> &gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"suppressAllComments"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span><span class="comment">&lt;!-- 是否取消注释 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"suppressDate"</span> <span class="attr">value</span>=<span class="string">"true"</span> /&gt;</span> <span class="comment">&lt;!-- 是否生成注释代时间戳--&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">commentGenerator</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!--数据库链接地址账号密码--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">jdbcConnection</span> <span class="attr">driverClass</span>=<span class="string">"$&#123;spring.datasource.driver-class-name&#125;"</span></span></span><br><span class="line"><span class="tag">                        <span class="attr">connectionURL</span>=<span class="string">"$&#123;spring.datasource.url&#125;"</span></span></span><br><span class="line"><span class="tag">                        <span class="attr">userId</span>=<span class="string">"$&#123;spring.datasource.username&#125;"</span></span></span><br><span class="line"><span class="tag">                        <span class="attr">password</span>=<span class="string">"$&#123;spring.datasource.password&#125;"</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"nullCatalogMeansCurrent"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">jdbcConnection</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 类型转换 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">javaTypeResolver</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 是否使用bigDecimal， false可自动转化以下类型（Long, Integer, Short, etc.） --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"forceBigDecimals"</span> <span class="attr">value</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">javaTypeResolver</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!--生成Model类存放位置--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">javaModelGenerator</span> <span class="attr">targetPackage</span>=<span class="string">"com.sugelamei.entity"</span> <span class="attr">targetProject</span>=<span class="string">"src/main/java"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"enableSubPackages"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"trimStrings"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">javaModelGenerator</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 生成mapxml文件 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">sqlMapGenerator</span> <span class="attr">targetPackage</span>=<span class="string">"mapper"</span> <span class="attr">targetProject</span>=<span class="string">"src/main/resources"</span> &gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"enableSubPackages"</span> <span class="attr">value</span>=<span class="string">"false"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">sqlMapGenerator</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 生成mapxml对应client，也就是接口dao --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">javaClientGenerator</span> <span class="attr">targetPackage</span>=<span class="string">"com.sugelamei.mapper"</span> <span class="attr">targetProject</span>=<span class="string">"src/main/java"</span> <span class="attr">type</span>=<span class="string">"XMLMAPPER"</span> &gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"enableSubPackages"</span> <span class="attr">value</span>=<span class="string">"false"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">javaClientGenerator</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">table</span> <span class="attr">tableName</span>=<span class="string">"article"</span> <span class="attr">enableCountByExample</span>=<span class="string">"true"</span> <span class="attr">enableUpdateByExample</span>=<span class="string">"true"</span> <span class="attr">enableDeleteByExample</span>=<span class="string">"true"</span> <span class="attr">enableSelectByExample</span>=<span class="string">"true"</span> <span class="attr">selectByExampleQueryId</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">generatedKey</span> <span class="attr">column</span>=<span class="string">"id"</span> <span class="attr">sqlStatement</span>=<span class="string">"Mysql"</span> <span class="attr">identity</span>=<span class="string">"true"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!----&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">table</span>  <span class="attr">tableName</span>=<span class="string">"user"</span> <span class="attr">enableCountByExample</span>=<span class="string">"true"</span> <span class="attr">enableUpdateByExample</span>=<span class="string">"true"</span> <span class="attr">enableDeleteByExample</span>=<span class="string">"true"</span> <span class="attr">enableSelectByExample</span>=<span class="string">"true"</span> <span class="attr">selectByExampleQueryId</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">generatedKey</span> <span class="attr">column</span>=<span class="string">"id"</span> <span class="attr">sqlStatement</span>=<span class="string">"Mysql"</span> <span class="attr">identity</span>=<span class="string">"true"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">context</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">generatorConfiguration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>  注意:</p>
+<p>  最好单独用一个模块或者项目生成代码和对应的*Mapper.xml,每次生成完以后就删除，重复运行生成代码的mybatis-generator:generate 不会覆盖以前的文件 会直接追加，在执行的时候就会报错！！！</p>
+<ul>
+<li><p>在application.properties中加入如下配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># MyBatis 配置</span><br><span class="line">## mapper xml 文件地址</span><br><span class="line">mybatis.mapper-locations=classpath*:mapper/*Mapper.xml</span><br><span class="line">##数据库url 注意不要加数据库名字</span><br><span class="line">spring.datasource.url=jdbc:mysql://192.168.10.21:3306/microservice01</span><br><span class="line">##数据库用户名</span><br><span class="line">spring.datasource.username=root</span><br><span class="line">##数据库密码</span><br><span class="line">spring.datasource.password=root</span><br><span class="line">##数据库驱动</span><br><span class="line">spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在代码生成<strong>前</strong>目录结构如下图所示：</p>
+<p><img src="/image/SpringCloud/image-20191116213057227.png" alt></p>
+</li>
+<li><p>然后点击生成代码</p>
+<p><img src="/image/SpringCloud/image-20191116213243818.png" alt></p>
+</li>
+<li><p>在代码生成<strong>后</strong>目录结构如下图所示：</p>
+<p><img src="/image/SpringCloud/image-20191116235956434.png" alt></p>
+</li>
+<li><p>至此，代码自动生成完毕，复制生成的代码到你自己的项目目录下.</p>
+</li>
+</ul>
+<h4 id="3-6-添加service和controller"><a href="#3-6-添加service和controller" class="headerlink" title="3.6 添加service和controller"></a>3.6 添加service和controller</h4><ul>
+<li>添加 UserService和UserServiceImpl</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">deleteByPrimaryKey</span><span class="params">(Long id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">insert</span><span class="params">(User record)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">User <span class="title">selectByPrimaryKey</span><span class="params">(Long id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">selectAll</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">updateByPrimaryKey</span><span class="params">(User record)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">deleteByPrimaryKey</span><span class="params">(Long id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userMapper.deleteByPrimaryKey(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">insert</span><span class="params">(User record)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> insert(record);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">selectByPrimaryKey</span><span class="params">(Long id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userMapper.selectByPrimaryKey(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">selectAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userMapper.selectAll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">updateByPrimaryKey</span><span class="params">(User record)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userMapper.updateByPrimaryKey(record);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>添加UserController（为了测试就写一个方法）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/user/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findUserById</span><span class="params">(@PathVariable(<span class="string">"id"</span>)</span> Long id) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.selectByPrimaryKey(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>UserController中用到的@GetMapping和@RestController注解。</p>
+<p>@GetMapping它是一个组合注解，等价于@RequestMapping(method=RequestMethod.GET)，用于简化开发。同理还有@PostMapping、@PutMapping、@DeleteMapping、@PatchMapping等。</p>
+<p>@RestController也是一个组合注解，等价于@Controller + @ResponseBody</p>
+</li>
+</ul>
+<h4 id="3-7-最终项目的目录结构如下图所示："><a href="#3-7-最终项目的目录结构如下图所示：" class="headerlink" title="3.7 最终项目的目录结构如下图所示："></a>3.7 最终项目的目录结构如下图所示：</h4><p>  <img src="/image/SpringCloud/image-20191116235837020.png" alt></p>
+<h4 id="3-8-启动并测试"><a href="#3-8-启动并测试" class="headerlink" title="3.8 启动并测试"></a>3.8 启动并测试</h4><ul>
+<li>在MicroserviceSimpleProviderUserApplication上加上@MapperScan(basePackages = “com.sugelamei.mapper”)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MapperScan</span>(basePackages = <span class="string">"com.sugelamei.mapper"</span>)</span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MicroserviceSimpleProviderUserApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(MicroserviceSimpleProviderUserApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>启动MicroserviceSimpleProviderUserApplication</p>
+</li>
+<li><p>访问<a href="http://localhost:8080/user/1" target="_blank" rel="noopener">http://localhost:8080/user/1</a> 获取结果</p>
+<p><img src="/image/SpringCloud/image-20191116235215043.png" alt></p>
+</li>
+</ul>
+<h3 id="4-编写服务消费者"><a href="#4-编写服务消费者" class="headerlink" title="4.编写服务消费者"></a>4.编写服务消费者</h3><p>​    前文编写了一个服务提供者（用户微服务），本节来编写一个服务消费者（电影微服务）。该服务非常简单，它使用RestTemplate调用用户微服务的API，从而查询指定ID的用户信息。</p>
+<ul>
+<li><p>使用Spring Initializr快速创建，只需要加入web即可，ArtifactId是microservice-simple-consumer-movie。</p>
+</li>
+<li><p>将entity包复制到com.sugelamei目录下</p>
+</li>
+<li><p>编写config配置类如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsumerConfig</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RestTemplate <span class="title">restTemplate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<p>@onfiguration标注在类上，相当于把该类作为spring的xml配置文件中的<beans>，作用为：配置spring容器(应用上下文) , 等价于<beans></beans> </beans></p>
+<p>@Bean是一个方法注解，作用是实例化一个Bean并使用该方法的名称命名。在本例中，添加@Bean注解的restTemplate()方法，等价于RestTemplate restTemplate=new RestTemplate();, @Bean等价于<bean></bean> 。</p>
+<ul>
+<li>.创建MovieController，在其中使用RestTemplate请求用户微服务的API。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MovieController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"consume/user/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findById</span><span class="params">(@PathVariable(<span class="string">"id"</span>)</span> Long id)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span>   restTemplate.getForObject(<span class="string">"http://localhost:8080/user/"</span>+id,User.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建application.yml配置文件，并配置端口：</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8081</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>最终项目的目录结构如下图所示：</li>
+</ul>
+<p><img src="/image/SpringCloud/image-20191117002302313.png" alt></p>
+<ul>
+<li><p>启动MicroserviceSimpleConsumerMovieApplication</p>
+</li>
+<li><p>访问</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:8081/consume/user/1</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<p>   获取结果（注意端口和请求路径不一样，服务提供者也需要在运行状态）</p>
+<p>  <img src="/image/SpringCloud/image-20191117002651887.png" alt></p>
+<p>说明电影微服务可以正常使用RestTemplate调用用户微服务的API。</p>
+<h3 id="5-硬编码有哪些问题"><a href="#5-硬编码有哪些问题" class="headerlink" title="5.硬编码有哪些问题"></a>5.硬编码有哪些问题</h3><p>至此，已经实现了一个用户微服务和电影微服务，并在电影微服务中使用RestTemplate调用用户微服务中的RESTfulAPI。一切都是那么的自然、简单、perfect！</p>
+<p>那么真的完美吗？来分析一下电影微服务的代码，在MovieController.java中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@GetMapping</span>(<span class="string">"/user/&#123;id&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">findById</span><span class="params">(@PathVariable(<span class="string">"id"</span>)</span> Long id)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span>        restTemplate.getForObject(<span class="string">"http://localhost:8080/user/"</span>+id,User.class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码可知，我们是把提供者的网络地址（IP和端口等）硬编码在代码中的，当然，也可将其提取到配置文件中去。例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">user:</span></span><br><span class="line"><span class="attr">  userServiceUrl:</span> <span class="attr">http://localhost:8080/</span></span><br></pre></td></tr></table></figure>
+
+<p>代码改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Value</span>(<span class="string">"$&#123;user.userServiceUrl&#125;"</span>)</span><br><span class="line"><span class="keyword">private</span> String userServiceUrl;</span><br><span class="line"> <span class="meta">@GetMapping</span>(<span class="string">"/user/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findById</span><span class="params">(@PathVariable(<span class="string">"id"</span>)</span> Long id)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span>   restTemplate.getForObject(userServiceUrl+id,User.class);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在传统的应用程序中，一般都是这么做的。然而，这种方式有很多问题，如下所示。</p>
+<p>•适用场景有局限：如果服务提供者的网络地址（IP和端口）发生了变化，会影响服务消费者。例如，用户微服务的网络地址发生变化，就需要修改电影微服务的配置，并重新发布,这显然是不可取的。</p>
+<p>•无法动态伸缩：在生产环境中，每个微服务一般都会部署多个实例，从而实现容灾和负载均衡。在微服务架构的系统中，还需要系统具备自动伸缩的能力，例如动态增减节点等,硬编码无法适应这种需求。</p>
+<p>那么要如何解决这些问题呢？</p>
+<h3 id="666-彩蛋"><a href="#666-彩蛋" class="headerlink" title="666.彩蛋"></a>666.彩蛋</h3><p>请大家持续关注公众号：Java橙序猿</p>
+<p> <img src="/image/common/superdevops.jpg" alt> </p>
+<p>关注博客：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://superdevops.cn</span><br></pre></td></tr></table></figure>
+
+<p>源码地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/superdevops-cn/spring-cloud-microservice</span><br></pre></td></tr></table></figure>
+
+<h3 id="888-参考资料"><a href="#888-参考资料" class="headerlink" title="888.参考资料"></a>888.参考资料</h3><p><a href="https://book.douban.com/subject/30278673/" target="_blank" rel="noopener">《Spring Cloud 与Docker 微服务架构实战》</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -226,19 +389,147 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/11/13/Spring _Cloud_01/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/11/17/Spring_Cloud_02/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Spring Cloud-02 微服务注册与发现Eureka
+        
+      </div>
+    </a>
   
   
-    </div></section>
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-说在前面"><span class="toc-number">1.</span> <span class="toc-text">0.说在前面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Spring-Cloud使用的前提"><span class="toc-number">2.</span> <span class="toc-text">1.Spring Cloud使用的前提</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-技术储备"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 技术储备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-工具及软件版本"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 工具及软件版本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-服务提供者与服务消费者"><span class="toc-number">3.</span> <span class="toc-text">2.服务提供者与服务消费者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-编写服务提供者"><span class="toc-number">4.</span> <span class="toc-text">3.编写服务提供者</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-使用-Spring-Initializr快速创建Spring-Boot项目（microservice-simple-provider-user）"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 使用 Spring Initializr快速创建Spring Boot项目（microservice-simple-provider-user）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-准备数据库脚本-在项目的classpath下建立schema-sql-并添加如下内容："><span class="toc-number">4.2.</span> <span class="toc-text">3.2 准备数据库脚本,在项目的classpath下建立schema.sql,并添加如下内容：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-准备几条数据-在项目的classpath下建立文件data-sql，并添加如下内容："><span class="toc-number">4.3.</span> <span class="toc-text">3.3 准备几条数据,在项目的classpath下建立文件data.sql，并添加如下内容：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-编写配置文件，命名为application-yml"><span class="toc-number">4.4.</span> <span class="toc-text">3.4 编写配置文件，命名为application.yml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5使用-springboot-mybatis-generator自动生成代码"><span class="toc-number">4.5.</span> <span class="toc-text">3.5使用 springboot + mybatis generator自动生成代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-添加service和controller"><span class="toc-number">4.6.</span> <span class="toc-text">3.6 添加service和controller</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-7-最终项目的目录结构如下图所示："><span class="toc-number">4.7.</span> <span class="toc-text">3.7 最终项目的目录结构如下图所示：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-8-启动并测试"><span class="toc-number">4.8.</span> <span class="toc-text">3.8 启动并测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-编写服务消费者"><span class="toc-number">5.</span> <span class="toc-text">4.编写服务消费者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-硬编码有哪些问题"><span class="toc-number">6.</span> <span class="toc-text">5.硬编码有哪些问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#666-彩蛋"><span class="toc-number">7.</span> <span class="toc-text">666.彩蛋</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#888-参考资料"><span class="toc-number">8.</span> <span class="toc-text">888.参考资料</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
+  
+  
   
 
-    
+  
+
+
+
+
+
+
+
+  
+    <section id="comments">
+      <div id="disqus_thread"></div>
+        <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'true'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  
+
+  
 
 
           </div>
@@ -261,8 +552,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
