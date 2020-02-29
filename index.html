@@ -145,6 +145,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-mysql-senior-architecture-introduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/25/mysql-senior-architecture-introduction/">Mysql高级-01 架构介绍</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/25/mysql-senior-architecture-introduction/" class="archive-article-date">
+  	<time datetime="2020-02-25T09:55:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="string">Mysql：8.0.19</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">系统：Centos</span> <span class="number">7.6</span><span class="number">.1810</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用DataGrip；</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-Mysql逻辑架构介绍"><a href="#1-Mysql逻辑架构介绍" class="headerlink" title="1.Mysql逻辑架构介绍"></a>1.<code>Mysql</code>逻辑架构介绍</h3><p>​     和其他数据库相比，mysql有点与众不同，它的架构可以在多种不同的场景中应用并发挥良好的作用，主要体现在储存引擎的架构上，插拔式的储存引擎将处理和其他的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需要和实际需要选择合适的存储引擎。</p>
+<p><img src="/image/mysql/image-20200229101759889.png" alt></p>
+<p>从上图可知，MySQL的逻辑框架主要分为四层：</p>
+        
+          <a class="article-more-a" href="/2020/02/25/mysql-senior-architecture-introduction/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/25/mysql-senior-architecture-introduction/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-spring-cloud-base-07-config" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -152,13 +236,13 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/01/spring-cloud-base-07-config/">Spring Cloud-07 使用Spring Cloud Config统一管理微服务配置</a>
+      <a class="article-title" href="/2019/12/01/spring-cloud-base-07-config/">Spring Cloud-07 使用Spring Cloud Config统一管理微服务配置</a>
     </h1>
   
 
         
-        <a href="/2020/12/01/spring-cloud-base-07-config/" class="archive-article-date">
-  	<time datetime="2020-12-01T02:20:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-12-01</time>
+        <a href="/2019/12/01/spring-cloud-base-07-config/" class="archive-article-date">
+  	<time datetime="2019-12-01T02:20:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-01</time>
 </a>
         
       </header>
@@ -170,7 +254,7 @@
 <h3 id="1-为什么要统一管理微服务配置"><a href="#1-为什么要统一管理微服务配置" class="headerlink" title="1.为什么要统一管理微服务配置"></a>1.为什么要统一管理微服务配置</h3><p>​        对于传统的单体应用，常使用配置文件管理所有配置。例如一个Spring Boot开发的单体应用，可将配置内容放在<code>application.yml</code>文件中。如果需要切换环境，可设置多个Profile，并在启动应用时指定<code>spring.profiles.active={profile}</code>。</p>
 <p>​      然而，在微服务架构中，微服务的配置管理一般有以下需求：</p>
         
-          <a class="article-more-a" href="/2020/12/01/spring-cloud-base-07-config/#more">more >></a>
+          <a class="article-more-a" href="/2019/12/01/spring-cloud-base-07-config/#more">more >></a>
         
       
 
@@ -198,7 +282,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/12/01/spring-cloud-base-07-config/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/12/01/spring-cloud-base-07-config/">展开全文 >></a>
         </p>
       
 
@@ -812,15 +896,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CentOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Spring Cloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -828,15 +912,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Feign</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
+                <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
+                <a href="javascript:void(0)" class="js-tag color2">Config</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
               </li>
             
             <div class="clearfix"></div>
