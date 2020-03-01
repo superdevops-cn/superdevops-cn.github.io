@@ -6,30 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Spring Cloud-03 Ribbon实现客户端侧负载均衡 | Java橙序猿</title>
+  <title>Archives: 2020/3 | Java橙序猿</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0.说在前面12345- JDK：Spring Cloud官方建议使用JDK 1.8;- Spring Boot：笔者使用Spring Boot 2.1.10.RELEASE;- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；- Maven：笔者使用Maven 3.6">
-<meta name="keywords" content="Spring Cloud,Ribbon">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Spring Cloud-03 Ribbon实现客户端侧负载均衡">
-<meta property="og:url" content="http://yoursite.com/2019/11/19/spring-cloud-base-03-Ribbon/index.html">
+  <meta name="description" content="世界上没有难学的技术，只有不去学习的懒人。">
+<meta name="keywords" content="IO,JVM,JUC,Java,Docker,Github,Hexo">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Java橙序猿">
+<meta property="og:url" content="http://yoursite.com/archives/2020/03/index.html">
 <meta property="og:site_name" content="Java橙序猿">
-<meta property="og:description" content="0.说在前面12345- JDK：Spring Cloud官方建议使用JDK 1.8;- Spring Boot：笔者使用Spring Boot 2.1.10.RELEASE;- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；- Maven：笔者使用Maven 3.6">
+<meta property="og:description" content="世界上没有难学的技术，只有不去学习的懒人。">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191120210323456.png">
-<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191125231049426.png">
-<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191125230855707.png">
-<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191125230930137.png">
-<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191201225224049.png">
-<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191201225446934.png">
-<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191204213656231.png">
-<meta property="og:image" content="http://yoursite.com/image/SpringCloud/image-20191201225446934.png">
-<meta property="og:image" content="http://yoursite.com/image/common/superdevops.jpg">
-<meta property="og:updated_time" content="2020-02-23T13:13:19.322Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring Cloud-03 Ribbon实现客户端侧负载均衡">
-<meta name="twitter:description" content="0.说在前面12345- JDK：Spring Cloud官方建议使用JDK 1.8;- Spring Boot：笔者使用Spring Boot 2.1.10.RELEASE;- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；- Maven：笔者使用Maven 3.6">
-<meta name="twitter:image" content="http://yoursite.com/image/SpringCloud/image-20191120210323456.png">
+<meta name="twitter:title" content="Java橙序猿">
+<meta name="twitter:description" content="世界上没有难学的技术，只有不去学习的懒人。">
   
  
 
@@ -154,345 +143,64 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-spring-cloud-base-03-Ribbon" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      Spring Cloud-03 Ribbon实现客户端侧负载均衡
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2020" class="archive-year">2020</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2020/03/01/mysql-senior-03-seven-join-queries/" class="archive-article-date">
+  	<time datetime="2020-03-01T03:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2020/03/01/mysql-senior-03-seven-join-queries/">Mysql高级-03 七种join查询</a>
     </h1>
   
 
-        
-        <a href="/2019/11/19/spring-cloud-base-03-Ribbon/" class="archive-article-date">
-  	<time datetime="2019-11-19T02:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- JDK：Spring Cloud官方建议使用JDK <span class="number">1.8</span>;</span><br><span class="line">- Spring Boot：笔者使用Spring Boot <span class="number">2.1</span>.10.RELEASE;</span><br><span class="line">- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3</span><br><span class="line">- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span><br><span class="line">- Maven：笔者使用Maven <span class="number">3.6</span>.1构建项目；</span><br></pre></td></tr></table></figure>
-
-<p>​       经过前面的讲解，已经实现了微服务的注册与发现。启动各个微服务时，Eureka Client会把自己的网络信息注册到Eureka Server上。世界似乎更美好了一些。</p>
-<p>​       然而，这样的架构依然有一些问题，比如负载均衡。一般来说，在生产环境中，各个微服务都会部署多个实例。那么服务消费者要如何将请求分摊到多个服务提供者实例上呢？</p>
-<a id="more"></a>
-
-<h3 id="1-Ribbon简介"><a href="#1-Ribbon简介" class="headerlink" title="1.Ribbon简介"></a>1.<code>Ribbon</code>简介</h3><p>​        Ribbon是<code>Netflix</code>发布的负载均衡器，它有助于控制HTTP和TCP客户端的行为。为Ribbon配置服务提供者地址列表后，Ribbon就可基于某种负载均衡算法，自动地帮助服务消费者去请求。Ribbon默认为我们提供了很多的负载均衡算法，例如轮询、随机等。当然，我们也可为Ribbon实现自定义的负载均衡算法。</p>
-<p>​         在Spring Cloud中，当Ribbon与Eureka配合使用时，Ribbon可自动从Eureka Server获取服务提供者地址列表，并基于负载均衡算法，请求其中一个服务提供者实例。如下图所示：</p>
-<p><img src="/image/SpringCloud/image-20191120210323456.png" alt></p>
-<h3 id="2-为服务者整合Ribbon"><a href="#2-为服务者整合Ribbon" class="headerlink" title="2.为服务者整合Ribbon"></a>2.为服务者整合Ribbon</h3><p>1.使用 <code>Spring Initializr</code>快速创建<code>microservice-consumer-movie-ribbon</code>，将<code>microservice-consumer-movie</code>项目中的内容复制过来，<code>pom.xml</code>如下：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.10.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span> <span class="comment">&lt;!-- lookup parent from repository --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.sugelamei<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>microservice-consumer-movie-ribbon<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>microservice-consumer-movie-ribbon<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>Demo project for Spring Boot<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">java.version</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">java.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">spring-cloud.version</span>&gt;</span>Greenwich.SR3<span class="tag">&lt;/<span class="name">spring-cloud.version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-ribbon<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring-cloud.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>由于前面已为电影微服务添加了<code>spring-cloud-starter-netflix-eureka-client</code>，该依赖已包含<code>spring-cloud-starter-netflix-ribbon</code>，也可以不引入此包。</p>
-<p>2.为<code>RestTemplate</code>添加<code>@LoadBalanced</code>注解。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsumerConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@LoadBalanced</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RestTemplate <span class="title">restTemplate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>只需添加注解<code>@LoadBalanced</code>注解，就可为<code>RestTemplate</code>整合Ribbon，使其具备负载均衡的能力。</p>
-<p>3.对Controller代码进行修改</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MovieController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/user/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findById</span><span class="params">(@PathVariable(<span class="string">"id"</span>)</span> Long id)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span>   restTemplate.getForObject(<span class="string">"http://microservice-provider-user-ribbon/user/"</span>+id,User.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​    由代码可知，我们将请求的地址改成了<a href="http://microservice-provider-user/。microservice-provider-user是用户微服务的**虚拟主机名**（virtual" target="_blank" rel="noopener">http://microservice-provider-user/。microservice-provider-user是用户微服务的**虚拟主机名**（virtual</a> hostname），当Ribbon和Eureka配合使用时，会自动将虚拟主机名映射成微服务的网络地址。</p>
-<h3 id="3-调整消费者"><a href="#3-调整消费者" class="headerlink" title="3.调整消费者"></a>3.调整消费者</h3><p>1.使用 <code>Spring Initializr</code>快速创建<code>microservice-provider-user-ribbon</code>，将<code>microservice-provider-user</code>项目中的内容复制过来，<code>pom.xml</code>如下：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.10.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span> <span class="comment">&lt;!-- lookup parent from repository --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.sugelamei<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>microservice-provider-user-ribbon<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>microservice-provider-user-ribbon<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>Demo project for Spring Boot<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">java.version</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">java.version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">spring-cloud.version</span>&gt;</span>Greenwich.SR3<span class="tag">&lt;/<span class="name">spring-cloud.version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring-cloud.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>2.添加<code>application-8081.yml</code></p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#服务端口</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8081</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">microservice-provider-user-ribbon</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">jdbc:mysql://192.168.10.21:3306/microservice01?useUnicode=true;characterEncoding=utf8;allowMultiQueries=true;autoReconnect=true</span></span><br><span class="line"><span class="attr">    driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"><span class="attr">    platform:</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">    schema:</span> <span class="attr">classpath:schema.sql</span></span><br><span class="line"><span class="attr">    data:</span> <span class="attr">classpath:data.sql</span></span><br><span class="line"><span class="attr">    initialization-mode:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line"><span class="attr">  mapper-locations:</span> <span class="string">classpath*:mapper/*Mapper.xml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    service-url:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://localhost:8761/eureka/</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    prefer-ip-address:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<p>3.添加<code>application-8082.yml</code></p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#服务端口</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">microservice-provider-user-ribbon</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">jdbc:mysql://192.168.10.21:3306/microservice02?useUnicode=true;characterEncoding=utf8;allowMultiQueries=true;autoReconnect=true</span></span><br><span class="line"><span class="attr">    driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"><span class="attr">    platform:</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">    schema:</span> <span class="attr">classpath:schema.sql</span></span><br><span class="line"><span class="attr">    data:</span> <span class="attr">classpath:data.sql</span></span><br><span class="line"><span class="attr">    initialization-mode:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line"><span class="attr">  mapper-locations:</span> <span class="string">classpath*:mapper/*Mapper.xml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    service-url:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://localhost:8761/eureka/</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    prefer-ip-address:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<p>​       对比2个配置文件可知，2个配置文件的不同之处在于8081端口对应数据库<code>microservice01</code>，8082端口对应数据库<code>microservice02</code>，这个就能通过不同数据库的不同数据来区分不同的微服务。</p>
-<p><strong>测试</strong></p>
-<p>1.启动<code>microservice-discovery-eureka</code>。</p>
-<p>2.基于2个不同的配置文件启动2个<code>microservice-provider-user-ribbon</code>实例。</p>
-<p>3.启动<code>microservice-consumer-movie-ribbon</code>。</p>
-<p>4.访问<em><a href="http://localhost:8761" target="_blank" rel="noopener">http://localhost:8761</a></em>；</p>
-<p><img src="/image/SpringCloud/image-20191125231049426.png" alt></p>
-<p>5.访问<a href="http://localhost:9081/user/1" target="_blank" rel="noopener">http://localhost:9081/user/1</a></p>
-<p><img src="/image/SpringCloud/image-20191125230855707.png" alt></p>
-<p><img src="/image/SpringCloud/image-20191125230930137.png" alt></p>
-<p>刷新以后将数据库切换，说明默认的负载均衡方式为轮询。</p>
-<ul>
-<li><p>虚拟主机名与虚拟<code>IP</code>非常类似，如果大家接触过<code>HAProxy</code>或Heartbeat，理解虚拟主机名就非常容易了。如果无法理解虚拟主机名，可将其简单理解成为提供者的服务名称，因为在默认情况下，虚拟主机名和服务名称是一致的。当然，也可使用配置属性<code>eureka.instance.virtual-host-name</code>或者<code>eureka.instance.secure-virtual-host-name</code>指定虚拟主机名。</p>
-</li>
-<li><p>不能将<code>restTemplate.getForObject(...)与loadBalancerClient.choose(...)</code>写在同一个方法中，两者之间会有冲突——因为此时代码中的<code>restTemplate</code>实际上是一个Ribbon客户端，本身已经包含了“choose”的行为。</p>
-</li>
-<li><p>虚拟主机名不能包含“_”之类的字符，否则Ribbon在调用时会报异常。 </p>
-</li>
-</ul>
-<h3 id="4-Ribbon配置自定义"><a href="#4-Ribbon配置自定义" class="headerlink" title="4.Ribbon配置自定义"></a>4.<code>Ribbon</code>配置自定义</h3><p>​      很多场景下，可能根据需要自定义Ribbon的配置，例如修改Ribbon的负载均衡规则等。<code>Spring Cloud Edgware</code>允许使用Java代码或属性自定义Ribbon的配置，两种方式是等价的。 </p>
-<h4 id="4-1-使用Java代码自定义Ribbon配置"><a href="#4-1-使用Java代码自定义Ribbon配置" class="headerlink" title="4.1   使用Java代码自定义Ribbon配置"></a>4.1   使用Java代码自定义Ribbon配置</h4><p>本小节来讨论如何使用代码自定义Ribbon配置。</p>
-<h5 id="4-1-1-配置指定名称的Ribbon-Client"><a href="#4-1-1-配置指定名称的Ribbon-Client" class="headerlink" title="4.1.1  配置指定名称的Ribbon Client"></a>4.1.1  配置指定名称的Ribbon Client</h5><p>在Spring Cloud中，Ribbon默认的配置类是<code>RibbonCl ientConfiguration</code>。也可使用一个<code>POJO</code>自定义Ribbon的配置（自定义配置会覆盖默认配置）。这种配置是细粒度的，不同名称的Ribbon客户端可使用不同配置。 </p>
-<p> 下面来为名为<code>microservice-provider-user</code>的Ribbon客户端自定义配置。 </p>
-<p>1.新建 <code>microservice-consumer-movie-ribbon-customizing</code>项目，复制 <code>microservice-consumer-movie-ribbon</code> 中相关代码；</p>
-<p>2.创建Ribbon的配置类。 </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RibbonConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IRule <span class="title">iRule</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//修改负载均衡算法为随机算法</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RandomRule();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意：该类比应该在主应用程序上下问的<code>@ComponentScan</code>所扫描的包中。</p>
-<ol start="3">
-<li>创建一个空类，并在其上添加@Configuration注解和<code>@RibbonClient</code>注解。 </li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> 使用RibbonClient为特定name的RibbonClient自定义配置。</span></span><br><span class="line"><span class="comment"> 使用@RibbonClient的configuration属性，指定Ribbon的配置类。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@RibbonClient</span>(name = <span class="string">"microservice-provider-user-ribbon"</span>,configuration = RibbonConfig.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RibbonClientConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p> 由代码可知，使用<code>@RibbonClient</code>注解的configuration属性，即可自定义指定名称Ribbon客户端的配置。 </p>
-<p><strong>测试</strong></p>
-<p>1.启动<code>microservice-discovery-eureka</code>。</p>
-<p>2.基于2个不同的配置文件启动2个<code>microservice-provider-user-ribbon</code>实例。</p>
-<p>3.启动<code>microservice-consumer-movie-ribbon-customizing</code>。</p>
-<p>4.访问<em><a href="http://localhost:8761" target="_blank" rel="noopener">http://localhost:8761</a></em>；</p>
-<p><img src="/image/SpringCloud/image-20191201225224049.png" alt></p>
-<p>5.访问<a href="http://localhost:9081/user/1" target="_blank" rel="noopener">http://localhost:9081/user/1</a></p>
-<p><img src="/image/SpringCloud/image-20191201225446934.png" alt></p>
-<p>每次刷新后会出现不同的<code>dataBase</code>，出现任意一个<code>dataBase</code>的概率是随机的。也就是在使用的负载均衡算法为随机算法，会随机访问有个服务获取数据。 此时请求会随机分布到两个用户微服务节点上，说明已经实现了Ribbon的自定义配置。 </p>
-<p><strong>注意</strong>：</p>
-<p>​    必须注意的是，本例中的<code>RibbonConfiguration</code>类不能存放在主应用程序上下文的<code>@ComponentScan</code>所扫描的包中，否则该类中的配置信息将被所有的<code>@RibbonClient</code>共享。</p>
-<p>​       因此，如果只想自定义某一个Ribbon客户端的配置，必须防止@Configuration注解的类所在的包与<code>@ComponentScan</code>扫描的包重叠，或应显式指定<code>@ComponentScan</code>不扫描@Configuration类所在的包。</p>
-<h5 id="4-1-2-全局配置"><a href="#4-1-2-全局配置" class="headerlink" title="4.1.2 全局配置"></a>4.1.2 全局配置</h5><p>可使用<code>@RibbonClients</code>注解为所有<code>RibbonClient</code>提供默认配置</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RibbonClients</span>(defaultConfiguration = DefaultRibbonConfig.class)</span><br><span class="line"><span class="keyword">public</span>  <span class="class"><span class="keyword">class</span> <span class="title">DefaultRibbonClientConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultServerList</span> <span class="keyword">extends</span> <span class="title">ConfigurationBasedServerList</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span>  <span class="title">DefaultServerList</span><span class="params">(IClientConfig clientConfig)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.initWithNiwsConfig(clientConfig);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultRibbonConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IRule <span class="title">rule</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  <span class="keyword">new</span> BestAvailableRule();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IPing <span class="title">ping</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PingUrl();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ServerList&lt;Server&gt; <span class="title">serverServerList</span><span class="params">(IClientConfig config)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DefaultRibbonClientConfig.DefaultServerList(config);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ServerListSubsetFilter <span class="title">serverListSubsetFilter</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ServerListSubsetFilter();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-2-使用属性自定义Ribbon配置"><a href="#4-2-使用属性自定义Ribbon配置" class="headerlink" title="4.2 使用属性自定义Ribbon配置"></a>4.2 使用属性自定义Ribbon配置</h4><p>​     从<code>Spring Cloud Netflix 1.2.0</code>开始（即从Spring Cloud Camden RELEASE开始，Ribbon支持使用属性自定义。这种方式比使用Java代码配置的方式更加方便。</p>
-<p>​    支持的属性如下，配置的前缀是<clientname>.ribbon.。其中，<clientname>是Ribbon Client的名称，<strong>如果省略，则表示全局配置</strong>。</clientname></clientname></p>
-<ul>
-<li><p><code>NFLoadBalancerClassName</code>：配置<code>ILoadBalancer</code>的实现类。</p>
-</li>
-<li><p><code>NFLoadBalancerRuleClassName</code>：配置<code>IRule</code>的实现类。</p>
-</li>
-<li><p><code>NFLoadBalancerPingClassName</code>：配置<code>IPing</code>的实现类。</p>
-</li>
-<li><p><code>NIWSServer ListClassName</code>：配置Server List的实现类。</p>
-</li>
-<li><p><code>NIWSServer ListFilterClassName</code>：配置<code>Server ListFilter</code>的实现类。</p>
-</li>
-</ul>
-<p>下面，我们来用属性来修改名为<code>microservice-provider-user</code>的Ribbon Client的负载均衡规则。</p>
-<p>​    新建<code>microservice-consumer-movie-ribbon-customizing-properties</code>项目，复制项目<code>microservice-consumer-movie-ribbon</code>中的内容；在项目的<code>application.yml</code>中内容即可：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9081</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">microservice-consumer-movie-ribbon-customizing-properties</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    service-url:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://localhost:8761/eureka/</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    prefer-ip-address:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="attr">microservice-provider-user-ribbon:</span></span><br><span class="line"><span class="attr">  ribbon:</span></span><br><span class="line"><span class="attr">    NFLoadBalancerRuleClassName:</span> <span class="string">com.netflix.loadbalancer.RandomRule</span></span><br></pre></td></tr></table></figure>
-
-<p>这样，就可将名为<code>microservice-provider-user</code>的Ribbon Client的负载均衡规则设为随机。</p>
-<p>若配置成如下形式，则表示对所有<code>RibbonClient</code>都使用<code>RandomRule</code>：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ribbon:</span></span><br><span class="line"><span class="attr">    NFLoadBalancerRuleClassName:</span> <span class="string">com.netflix.loadbalancer.RandomRule</span></span><br></pre></td></tr></table></figure>
-
-<p>由代码不难看出，使用属性自定义的方式比用Java代码配置方便很多。</p>
-<h3 id="5-脱离Eureka使用Ribbon"><a href="#5-脱离Eureka使用Ribbon" class="headerlink" title="5.脱离Eureka使用Ribbon"></a>5.脱离Eureka使用Ribbon</h3><p>​         在前面的描述中，是将Ribbon与Eureka配合使用的。但现实中可能不具备这样的条件，例如一些遗留的微服务，它们可能并没有注册到Eureka Server上，甚至根本不是使用Spring Cloud开发的，此时要想使用Ribbon实现负载均衡，要怎么办呢？</p>
-<p>Ribbon支持脱离Eureka使用，如图所示：</p>
-<p><img src="/image/SpringCloud/image-20191204213656231.png" alt></p>
-<p>​      下面将通过一个简单的示例为大家讲解如何脱离Eureka使用Ribbon。</p>
-<p>1.新建<code>microservice-consumer-movie-without-eureka</code>项目，复制项目<code>microservice-consumer-movie-ribbon</code>中的内容</p>
-<p>2.为了让测试更具说服力，干脆为项目去掉Eureka的依赖<code>spring-cloud-starter-netflix-eureka-client</code>，只使用Ribbon的依赖<code>spring-cloud-starter-netflix-ribbon</code>。在项目的<code>pom.xml</code>中，找到：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>将此依赖删除。</p>
-<p>3.去掉启动类上的<code>@EnableDiscoveryClient</code>注解（如果有的话）。</p>
-<p>4.将<code>application.yml</code>改成如下：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9081</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">microservice-consumer-movie-without-eureka</span></span><br><span class="line"><span class="comment">#Ribbon客户端设置请求的地址列表</span></span><br><span class="line"><span class="attr">microservice-provider-user-ribbon:</span></span><br><span class="line"><span class="attr">  ribbon:</span></span><br><span class="line"><span class="attr">    listOfServers:</span> <span class="attr">localhost:8000,localhost:8001</span></span><br></pre></td></tr></table></figure>
-
-<p>5.在<code>microservice-provider-user-ribbon</code>中新增<code>application-8000.yml</code>和<code>application-8001.yml</code>配置文件，具体内容如下：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#服务端口  8000对应application-8000.yml 8001对应application-8001.yml </span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8000</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">microservice-provider-user-ribbon</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">jdbc:mysql://192.168.10.21:3306/microservice01?useUnicode=true;characterEncoding=utf8;allowMultiQueries=true;autoReconnect=true</span></span><br><span class="line"><span class="attr">    driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"><span class="attr">    platform:</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">    schema:</span> <span class="attr">classpath:schema.sql</span></span><br><span class="line"><span class="attr">    data:</span> <span class="attr">classpath:data.sql</span></span><br><span class="line"><span class="attr">    initialization-mode:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line"><span class="attr">  mapper-locations:</span> <span class="string">classpath*:mapper/*Mapper.xml</span></span><br><span class="line"><span class="attr">  eureka:</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    enabled:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<p>6.修改<code>MovieController</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MovieController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/user/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findById</span><span class="params">(@PathVariable(<span class="string">"id"</span>)</span> Long id) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> restTemplate.getForObject(<span class="string">"http://microservice-provider-user-ribbon/user/"</span> + id, User.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>测试</strong></p>
-<p>1.根据2个不同的配置文件启动2个端口分别为8000和8001的<code>microservice-provider-user-ribbon</code>服务；</p>
-<p>2.启动<code>microservice-consumer-movie-without-eureka</code></p>
-<p>3.访问</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:9081/user/1</span><br></pre></td></tr></table></figure>
-
-<p><img src="/image/SpringCloud/image-20191201225446934.png" alt></p>
-<p>由结果可知，尽管电影微服务和用户微服务此时并没有注册到Eureka上，Ribbon仍可正常工作，请求依旧会分摊到两个用户微服务节点上。</p>
-<p><strong>注意</strong></p>
-<p>当<code>EurekaClient</code>依赖在项目的<code>classpath</code>下时，如果想单独使用Ribbon，而不使用<code>Eurkea</code>的服务发现功能，需添加配置<code>ribbon.eureka.enabled=false</code>。</p>
-<p>某些场景下，我们可能只想让指定名称的Ribbon Client去使用指定的URL请求，其他Ribbon Client依旧与Eureka配合使用，那么可配置如下：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="string">&lt;clientName&gt;:</span></span><br><span class="line"><span class="attr">  ribbon:</span></span><br><span class="line"><span class="attr">    NFLoadBalancerRuleClassName:</span> <span class="string">com.netflix.loadbalancer.RandomRule</span></span><br><span class="line"><span class="attr">    listOfServers:</span> <span class="attr">localhost:8000,localhost:8001</span></span><br></pre></td></tr></table></figure>
-
-<p>这样，对于名为<clientname>的Ribbon Client，即可从地址列表localhost:8000,localhost:8001中选择地址去请求，而其他名称的Ribbon Client依旧可与Eureka配合使用——自动从Eureka Server获得目标服务的地址，并选择一个去请求。</clientname></p>
-<h3 id="6-饥饿加载"><a href="#6-饥饿加载" class="headerlink" title="6.饥饿加载"></a>6.饥饿加载</h3><p>Spring Cloud会为每个名称的Ribbon Client维护一个子应用程序上下文（还记得Spring Framework中的父子上下文吗？），这个上下文默认是懒加载的。指定名称的Ribbon Client第一次请求时，对应的上下文才会被加载，因此，首次请求往往会比较慢。从Spring Cloud Dalston开始，我们可配置饥饿加载。例如：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ribbon:</span></span><br><span class="line"><span class="attr">  eager-load:</span></span><br><span class="line"><span class="attr">    enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    clients:</span> <span class="string">client1,client2</span></span><br></pre></td></tr></table></figure>
-
-<p>这样，对于名为<code>client1、client2</code>的Ribbon Client，将在启动时就加载对应的子应用程序上下文，从而提高首次请求的访问速度。</p>
-<h3 id="666-彩蛋"><a href="#666-彩蛋" class="headerlink" title="666.彩蛋"></a>666.彩蛋</h3><p>请大家持续关注公众号：Java橙序猿</p>
-<p> <img src="/image/common/superdevops.jpg" alt> </p>
-<p>关注博客：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://superdevops.cn</span><br></pre></td></tr></table></figure>
-
-<p>源码地址：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/superdevops-cn/spring-cloud-microservice</span><br></pre></td></tr></table></figure>
-
-<h3 id="888-参考资料"><a href="#888-参考资料" class="headerlink" title="888.参考资料"></a>888.参考资料</h3><p><a href="https://book.douban.com/subject/30278673/" target="_blank" rel="noopener">《Spring Cloud 与Docker 微服务架构实战》</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Ribbon</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/11/19/spring-cloud-base-03-Ribbon/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/11/21/spring-cloud-base-04-feign/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Spring Cloud-04 Feign实现声明式REST调用
-        
-      </div>
-    </a>
   
   
-    <a href="/2019/11/17/spring-cloud-base-02-eureka/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Spring Cloud-02 微服务注册与发现Eureka</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-说在前面"><span class="toc-number">1.</span> <span class="toc-text">0.说在前面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Ribbon简介"><span class="toc-number">2.</span> <span class="toc-text">1.Ribbon简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-为服务者整合Ribbon"><span class="toc-number">3.</span> <span class="toc-text">2.为服务者整合Ribbon</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-调整消费者"><span class="toc-number">4.</span> <span class="toc-text">3.调整消费者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Ribbon配置自定义"><span class="toc-number">5.</span> <span class="toc-text">4.Ribbon配置自定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-使用Java代码自定义Ribbon配置"><span class="toc-number">5.1.</span> <span class="toc-text">4.1   使用Java代码自定义Ribbon配置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#4-1-1-配置指定名称的Ribbon-Client"><span class="toc-number">5.1.1.</span> <span class="toc-text">4.1.1  配置指定名称的Ribbon Client</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-1-2-全局配置"><span class="toc-number">5.1.2.</span> <span class="toc-text">4.1.2 全局配置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-使用属性自定义Ribbon配置"><span class="toc-number">5.2.</span> <span class="toc-text">4.2 使用属性自定义Ribbon配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-脱离Eureka使用Ribbon"><span class="toc-number">6.</span> <span class="toc-text">5.脱离Eureka使用Ribbon</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-饥饿加载"><span class="toc-number">7.</span> <span class="toc-text">6.饥饿加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#666-彩蛋"><span class="toc-number">8.</span> <span class="toc-text">666.彩蛋</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#888-参考资料"><span class="toc-number">9.</span> <span class="toc-text">888.参考资料</span></a></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
-  
-  
+    </div></section>
   
 
-  
-
-
-
-
-
-
-
-  
-    <section id="comments">
-      <div id="disqus_thread"></div>
-        <script type="text/javascript">
-        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-        var disqus_shortname = 'true'; // required: replace example with your forum shortname
-
-        /* * * DON'T EDIT BELOW THIS LINE * * */
-        (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-      </script>
-      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    </section>
-  
-
-  
+    
 
 
           </div>
@@ -515,8 +223,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
