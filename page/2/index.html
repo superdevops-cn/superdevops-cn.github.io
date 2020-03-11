@@ -154,6 +154,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-spring-cloud-base-05-hystrix" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/24/spring-cloud-base-05-hystrix/">Spring Cloud-05 Hystrix实现微服务的容错处理</a>
+    </h1>
+  
+
+        
+        
+<a href="/2019/11/24/spring-cloud-base-05-hystrix/" class="archive-article-date">
+  	<time datetime="2019-11-24T01:20:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0. 说在前面"></a>0. 说在前面</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="string">JDK：Spring</span> <span class="string">Cloud官方建议使用JDK</span> <span class="number">1.8</span><span class="string">;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Boot：笔者使用Spring</span> <span class="string">Boot</span> <span class="number">2.1</span><span class="number">.10</span><span class="string">.RELEASE;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Cloud：笔者使用Spring</span> <span class="string">Cloud</span>  <span class="string">Greenwich.SR3</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Maven：笔者使用Maven</span> <span class="number">3.6</span><span class="number">.1</span><span class="string">构建项目；</span></span><br></pre></td></tr></table></figure>
+
+<p>​     </p>
+<p>​        前面的文章已经使用<code>Eureka</code>实现了微服务的注册与发现，<code>Ribbon</code>实现了客户端侧的负载均衡，<code>Feign</code>实现了声明式的<code>API</code>调用。</p>
+<p>​       下面我们就来讲解如何使用<code>Hystrix</code>实现微服务的容错。</p>
+<h3 id="1-实现容错的手段"><a href="#1-实现容错的手段" class="headerlink" title="1. 实现容错的手段"></a>1. 实现容错的手段</h3><p>​        如果服务提供者响应非常缓慢，那么消费者对提供者的请求就会被强制等待，直到提供者响应或超时。在高负载场景下，如果不做任何处理，此类问题可能会导致服务消费者的资源耗竭甚至整个系统的崩溃。例如，曾经发生过一个案例——某电子商务网站在一个黑色星期五发生过载。过多的并发请求，导致用户支付的请求延迟很久都没有响应，在等待很长时间后最终失败。支付失败又导致用户重新刷新页面并再次尝试支付，进一步增加了服务器的负载，最终整个系统都崩溃了。</p>
+        
+          <a class="article-more-a" href="/2019/11/24/spring-cloud-base-05-hystrix/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Hystrix</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/11/24/spring-cloud-base-05-hystrix/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-spring-cloud-base-04-feign" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -602,11 +688,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -618,11 +704,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
+                <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
+                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
               </li>
             
             <div class="clearfix"></div>
