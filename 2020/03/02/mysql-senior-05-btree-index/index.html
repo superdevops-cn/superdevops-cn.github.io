@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Mysql高级-05 BTree索引 | Java橙序猿</title>
+  <title>Mysql 8 高级-05 BTree索引 | Java橙序猿</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="1. BTree介绍Btree索引(或Balanced Tree)，是一种很普遍的数据库索引结构。其特点是定位高效、利用率高、自我平衡，特别适用于高基数字段，定位单条或小范围数据非常高效。理论上，使用Btree在亿条数据与100条数据中定位记录的花销相同。 特点：数据结构利用率高，定位高效。 ​            永远保持平衡。 2.BTree索引数据结构Btree索引的数据结构如下：">
 <meta name="keywords" content="Mysql,CentOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql高级-05 BTree索引">
+<meta property="og:title" content="Mysql 8 高级-05 BTree索引">
 <meta property="og:url" content="http://yoursite.com/2020/03/02/mysql-senior-05-btree-index/index.html">
 <meta property="og:site_name" content="Java橙序猿">
 <meta property="og:description" content="1. BTree介绍Btree索引(或Balanced Tree)，是一种很普遍的数据库索引结构。其特点是定位高效、利用率高、自我平衡，特别适用于高基数字段，定位单条或小范围数据非常高效。理论上，使用Btree在亿条数据与100条数据中定位记录的花销相同。 特点：数据结构利用率高，定位高效。 ​            永远保持平衡。 2.BTree索引数据结构Btree索引的数据结构如下：">
@@ -24,9 +24,9 @@
 <meta property="og:image" content="http://yoursite.com/image/mysql/image-20200302220006610.png">
 <meta property="og:image" content="http://yoursite.com/image/mysql/image-20200302223950907.png">
 <meta property="og:image" content="http://yoursite.com/image/common/superdevops.jpg">
-<meta property="og:updated_time" content="2020-03-02T15:17:01.815Z">
+<meta property="og:updated_time" content="2020-03-22T14:01:48.631Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql高级-05 BTree索引">
+<meta name="twitter:title" content="Mysql 8 高级-05 BTree索引">
 <meta name="twitter:description" content="1. BTree介绍Btree索引(或Balanced Tree)，是一种很普遍的数据库索引结构。其特点是定位高效、利用率高、自我平衡，特别适用于高基数字段，定位单条或小范围数据非常高效。理论上，使用Btree在亿条数据与100条数据中定位记录的花销相同。 特点：数据结构利用率高，定位高效。 ​            永远保持平衡。 2.BTree索引数据结构Btree索引的数据结构如下：">
 <meta name="twitter:image" content="http://yoursite.com/image/mysql/image-20200301190441311.png">
   
@@ -169,7 +169,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Mysql高级-05 BTree索引
+      Mysql 8 高级-05 BTree索引
     </h1>
   
 
@@ -327,14 +327,14 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Mysql高级-06 性能优化
+          Mysql 8 高级-06 性能优化
         
       </div>
     </a>
   
   
     <a href="/2020/03/01/mysql-senior-04-index-introduction/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Mysql高级-04 索引简介</div>
+      <div class="article-nav-title">Mysql 8 高级-04 索引简介</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -517,15 +517,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Feign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -534,10 +538,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
               </li>
             
             <div class="clearfix"></div>

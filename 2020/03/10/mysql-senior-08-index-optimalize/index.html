@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Mysql高级-08 索引优化 | Java橙序猿</title>
+  <title>Mysql 8 高级-08 索引优化 | Java橙序猿</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="1.数据准备12345678910111213141516171819202122232425262728293031323334drop  table if exists person;create table if not exists person(    id    int primary key auto_increment,    name  varchar(100) not null">
 <meta name="keywords" content="Mysql,CentOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql高级-08 索引优化">
+<meta property="og:title" content="Mysql 8 高级-08 索引优化">
 <meta property="og:url" content="http://yoursite.com/2020/03/10/mysql-senior-08-index-optimalize/index.html">
 <meta property="og:site_name" content="Java橙序猿">
 <meta property="og:description" content="1.数据准备12345678910111213141516171819202122232425262728293031323334drop  table if exists person;create table if not exists person(    id    int primary key auto_increment,    name  varchar(100) not null">
@@ -33,9 +33,9 @@
 <meta property="og:image" content="http://yoursite.com/image/mysql/image-20200311225611738.png">
 <meta property="og:image" content="http://yoursite.com/image/mysql/image-20200311225737535.png">
 <meta property="og:image" content="http://yoursite.com/image/common/superdevops.jpg">
-<meta property="og:updated_time" content="2020-03-11T15:20:40.051Z">
+<meta property="og:updated_time" content="2020-03-22T14:01:48.633Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql高级-08 索引优化">
+<meta name="twitter:title" content="Mysql 8 高级-08 索引优化">
 <meta name="twitter:description" content="1.数据准备12345678910111213141516171819202122232425262728293031323334drop  table if exists person;create table if not exists person(    id    int primary key auto_increment,    name  varchar(100) not null">
 <meta name="twitter:image" content="http://yoursite.com/image/mysql/image-20200310223728684.png">
   
@@ -178,7 +178,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Mysql高级-08 索引优化
+      Mysql 8 高级-08 索引优化
     </h1>
   
 
@@ -280,7 +280,6 @@
 <p>关注博客：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://superdevops.cn</span><br></pre></td></tr></table></figure>
 
-<h3 id="888-参考文档"><a href="#888-参考文档" class="headerlink" title="888.参考文档"></a>888.参考文档</h3><p>尚硅谷阳哥<code>mysql</code>高级视频</p>
 
       
 
@@ -368,9 +367,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2020/03/12/mysql-senior-09-query-optimalize/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Mysql 8 高级-09 查询优化
+        
+      </div>
+    </a>
+  
   
     <a href="/2020/03/05/mysql-senior-07-index-analysis/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Mysql高级-07 索引分析</div>
+      <div class="article-nav-title">Mysql 8 高级-07 索引分析</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -397,7 +405,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-数据准备"><span class="toc-number">1.</span> <span class="toc-text">1.数据准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-全值匹配我最爱"><span class="toc-number">2.</span> <span class="toc-text">2.全值匹配我最爱</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-使用一个字段的索引"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 使用一个字段的索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-使用两个字段的索引"><span class="toc-number">2.2.</span> <span class="toc-text">2.使用两个字段的索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-使用三个字段的索引"><span class="toc-number">2.3.</span> <span class="toc-text">3.使用三个字段的索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-最左前缀要遵守（带头大哥不能死）"><span class="toc-number">2.4.</span> <span class="toc-text">3.最左前缀要遵守（带头大哥不能死）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-中间兄弟不能断"><span class="toc-number">2.5.</span> <span class="toc-text">4.中间兄弟不能断</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-索引列上少计算"><span class="toc-number">2.6.</span> <span class="toc-text">5.索引列上少计算</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-范围之后全失效"><span class="toc-number">3.</span> <span class="toc-text">6. 范围之后全失效</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-Like百分写最右"><span class="toc-number">3.1.</span> <span class="toc-text">7. Like百分写最右</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-覆盖索引不写星"><span class="toc-number">3.2.</span> <span class="toc-text">8.覆盖索引不写星</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-不等空值还有or（分情况讨论）"><span class="toc-number">3.3.</span> <span class="toc-text">9.不等空值还有or（分情况讨论）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-1-情况一"><span class="toc-number">3.4.</span> <span class="toc-text">9.1 情况一</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#9-2-情况二"><span class="toc-number">3.4.1.</span> <span class="toc-text">9.2 情况二</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-VAR引号不可丢"><span class="toc-number">4.</span> <span class="toc-text">10. VAR引号不可丢</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-优化总结口诀"><span class="toc-number">5.</span> <span class="toc-text">11.优化总结口诀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#666-彩蛋"><span class="toc-number">6.</span> <span class="toc-text">666.彩蛋</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#888-参考文档"><span class="toc-number">7.</span> <span class="toc-text">888.参考文档</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-数据准备"><span class="toc-number">1.</span> <span class="toc-text">1.数据准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-全值匹配我最爱"><span class="toc-number">2.</span> <span class="toc-text">2.全值匹配我最爱</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-使用一个字段的索引"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 使用一个字段的索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-使用两个字段的索引"><span class="toc-number">2.2.</span> <span class="toc-text">2.使用两个字段的索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-使用三个字段的索引"><span class="toc-number">2.3.</span> <span class="toc-text">3.使用三个字段的索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-最左前缀要遵守（带头大哥不能死）"><span class="toc-number">2.4.</span> <span class="toc-text">3.最左前缀要遵守（带头大哥不能死）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-中间兄弟不能断"><span class="toc-number">2.5.</span> <span class="toc-text">4.中间兄弟不能断</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-索引列上少计算"><span class="toc-number">2.6.</span> <span class="toc-text">5.索引列上少计算</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-范围之后全失效"><span class="toc-number">3.</span> <span class="toc-text">6. 范围之后全失效</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-Like百分写最右"><span class="toc-number">3.1.</span> <span class="toc-text">7. Like百分写最右</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-覆盖索引不写星"><span class="toc-number">3.2.</span> <span class="toc-text">8.覆盖索引不写星</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-不等空值还有or（分情况讨论）"><span class="toc-number">3.3.</span> <span class="toc-text">9.不等空值还有or（分情况讨论）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-1-情况一"><span class="toc-number">3.4.</span> <span class="toc-text">9.1 情况一</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#9-2-情况二"><span class="toc-number">3.4.1.</span> <span class="toc-text">9.2 情况二</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-VAR引号不可丢"><span class="toc-number">4.</span> <span class="toc-text">10. VAR引号不可丢</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-优化总结口诀"><span class="toc-number">5.</span> <span class="toc-text">11.优化总结口诀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#666-彩蛋"><span class="toc-number">6.</span> <span class="toc-text">666.彩蛋</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -553,15 +561,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Feign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -570,10 +582,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
               </li>
             
             <div class="clearfix"></div>

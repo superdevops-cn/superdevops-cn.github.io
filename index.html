@@ -154,6 +154,335 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-mysql-senior-12-trigger" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/19/mysql-senior-12-trigger/">Mysql 8 高级-12 触发器</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/19/mysql-senior-12-trigger/" class="archive-article-date">
+  	<time datetime="2020-03-19T12:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-触发器介绍"><a href="#1-触发器介绍" class="headerlink" title="1. 触发器介绍"></a>1. 触发器介绍</h3><p>​    MySQL的触发器和存储过程一样，都是嵌入到MySQL的一段程序。触发器是由事件来触发某个操作，这些事件包括INSERT、UPDATAE和DELETE语句。如果定义了触发程序，当数据库执行这些语句的时候就会激发触发器执行相应的操作，触发程序是与表有关的命名数据库对象，当表上出现特定事件时，将激活该对象。       </p>
+<p>​        触发器（trigger）是一个特殊的存储过程，不同的是，执行存储过程要使用CALL语句来调用，而触发器的执行不需要使用CALL语句来调用，也不需要手工启动，只要当一个预定义的事件发生的时候，就会被MySQL自动调用。比如当对fruits表进行操作（INSERT、DELETE或UPDATE）时就会激活它执行。触发器可以查询其他表，而且可以包含复杂的SQL语句。它们主要用于满足复杂的业务规则或要求。</p>
+        
+          <a class="article-more-a" href="/2020/03/19/mysql-senior-12-trigger/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/19/mysql-senior-12-trigger/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-11-view" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/17/mysql-senior-11-view/">Mysql 8 高级-11 视图</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/17/mysql-senior-11-view/" class="archive-article-date">
+  	<time datetime="2020-03-17T12:40:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-视图概述"><a href="#1-视图概述" class="headerlink" title="1.  视图概述"></a>1.  视图概述</h3><p>​      视图是从一个或者多个表中导出的，视图的行为与表非常相似，但视图是一个虚拟表。在视图中用户可以使用SELECT语句查询数据，以及使用INSERT、UPDATE和DELETE修改记录。从MySQL 5.0开始可以使用视图，视图可以使用户操作方便，而且可以保障数据库系统的安全。</p>
+<h4 id="1-1-视图的含义"><a href="#1-1-视图的含义" class="headerlink" title="1.1 视图的含义"></a>1.1 视图的含义</h4><p>​     视图是一个虚拟表，是从数据库中一个或多个表中导出来的表。视图还可以从已经存在的视图的基础上定义。视图一经定义便存储在数据库中，与其相对应的数据并没有像表那样在数据库中再存储一份，通过视图看到的数据只是存放在基本表中的数据。对视图的操作与对表的操作一样，可以对其进行查询、修改和删除。当对通过视图看到的数据进行修改时，相应的基本表的数据也要发生变化；同时，若基本表的数据发生变化，则这种变化也可以自动反映到视图中。</p>
+        
+          <a class="article-more-a" href="/2020/03/17/mysql-senior-11-view/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/17/mysql-senior-11-view/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-10-stored-procedure" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/15/mysql-senior-10-stored-procedure/">Mysql 8 高级-10 存储过程</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/15/mysql-senior-10-stored-procedure/" class="archive-article-date">
+  	<time datetime="2020-03-15T13:24:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-存储过程和函数概述"><a href="#1-存储过程和函数概述" class="headerlink" title="1. 存储过程和函数概述"></a>1. 存储过程和函数概述</h3><p>​    存储过程和函数是  事先经过编译并存储在数据库中的一段 SQL 语句的集合，调用存储过程和函数可以简化应用开发人员的很多工作，减少数据在数据库和应用服务器之间的传输，对于提高数据处理的效率是有好处的。    </p>
+<p>​    存储过程和函数的区别在于函数必须有返回值，而存储过程没有。</p>
+<p>​    函数 ： 是一个有返回值的过程 ；</p>
+<p>​    过程 ： 是一个没有返回值的函数 ；</p>
+        
+          <a class="article-more-a" href="/2020/03/15/mysql-senior-10-stored-procedure/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/15/mysql-senior-10-stored-procedure/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-09-query-optimalize" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/12/mysql-senior-09-query-optimalize/">Mysql 8 高级-09 查询优化</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/12/mysql-senior-09-query-optimalize/" class="archive-article-date">
+  	<time datetime="2020-03-12T12:38:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-准备数据"><a href="#1-准备数据" class="headerlink" title="1.准备数据"></a>1.准备数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span>   <span class="keyword">if</span> <span class="keyword">exists</span> <span class="keyword">query</span>;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">query</span></span><br><span class="line">(</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">int</span> auto_increment primary <span class="keyword">key</span>,</span><br><span class="line">    t0 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t1 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t2 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t3 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t4 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t5 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t6 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t7 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t8 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t9 <span class="built_in">varchar</span>(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">)<span class="keyword">engine</span> =<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span> =utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'a0'</span>,<span class="string">'a1'</span>,<span class="string">'a2'</span>,<span class="string">'a3'</span>,<span class="string">'a4'</span>,<span class="string">'a5'</span>,<span class="string">'a6'</span>,<span class="string">'a7'</span>,<span class="string">'a8'</span>,<span class="string">'a9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'b0'</span>,<span class="string">'b1'</span>,<span class="string">'b2'</span>,<span class="string">'b3'</span>,<span class="string">'b4'</span>,<span class="string">'b5'</span>,<span class="string">'b6'</span>,<span class="string">'b7'</span>,<span class="string">'b8'</span>,<span class="string">'b9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'c0'</span>,<span class="string">'c1'</span>,<span class="string">'c2'</span>,<span class="string">'c3'</span>,<span class="string">'c4'</span>,<span class="string">'c5'</span>,<span class="string">'c6'</span>,<span class="string">'c7'</span>,<span class="string">'c8'</span>,<span class="string">'c9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'d0'</span>,<span class="string">'d1'</span>,<span class="string">'d2'</span>,<span class="string">'d3'</span>,<span class="string">'d4'</span>,<span class="string">'d5'</span>,<span class="string">'d6'</span>,<span class="string">'d7'</span>,<span class="string">'d8'</span>,<span class="string">'d9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'e0'</span>,<span class="string">'e1'</span>,<span class="string">'e2'</span>,<span class="string">'e3'</span>,<span class="string">'e4'</span>,<span class="string">'e5'</span>,<span class="string">'e6'</span>,<span class="string">'e7'</span>,<span class="string">'e8'</span>,<span class="string">'e9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'f0'</span>,<span class="string">'f1'</span>,<span class="string">'f2'</span>,<span class="string">'f3'</span>,<span class="string">'f4'</span>,<span class="string">'f5'</span>,<span class="string">'f6'</span>,<span class="string">'f7'</span>,<span class="string">'f8'</span>,<span class="string">'f9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'g0'</span>,<span class="string">'g1'</span>,<span class="string">'g2'</span>,<span class="string">'g3'</span>,<span class="string">'g4'</span>,<span class="string">'g5'</span>,<span class="string">'g6'</span>,<span class="string">'g7'</span>,<span class="string">'g8'</span>,<span class="string">'g9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'h0'</span>,<span class="string">'h1'</span>,<span class="string">'h2'</span>,<span class="string">'h3'</span>,<span class="string">'h4'</span>,<span class="string">'h5'</span>,<span class="string">'h6'</span>,<span class="string">'h7'</span>,<span class="string">'h8'</span>,<span class="string">'h9'</span>);</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2020/03/12/mysql-senior-09-query-optimalize/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/12/mysql-senior-09-query-optimalize/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-mysql-senior-08-index-optimalize" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -161,7 +490,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/10/mysql-senior-08-index-optimalize/">Mysql高级-08 索引优化</a>
+      <a class="article-title" href="/2020/03/10/mysql-senior-08-index-optimalize/">Mysql 8 高级-08 索引优化</a>
     </h1>
   
 
@@ -242,7 +571,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/05/mysql-senior-07-index-analysis/">Mysql高级-07 索引分析</a>
+      <a class="article-title" href="/2020/03/05/mysql-senior-07-index-analysis/">Mysql 8 高级-07 索引分析</a>
     </h1>
   
 
@@ -323,7 +652,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/03/mysql-senior-06-explain/">Mysql高级-06 性能优化</a>
+      <a class="article-title" href="/2020/03/03/mysql-senior-06-explain/">Mysql 8 高级-06 性能优化</a>
     </h1>
   
 
@@ -405,7 +734,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/02/mysql-senior-05-btree-index/">Mysql高级-05 BTree索引</a>
+      <a class="article-title" href="/2020/03/02/mysql-senior-05-btree-index/">Mysql 8 高级-05 BTree索引</a>
     </h1>
   
 
@@ -490,7 +819,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/01/mysql-senior-04-index-introduction/">Mysql高级-04 索引简介</a>
+      <a class="article-title" href="/2020/03/01/mysql-senior-04-index-introduction/">Mysql 8 高级-04 索引简介</a>
     </h1>
   
 
@@ -576,7 +905,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/29/mysql-senior-03-seven-join-queries/">Mysql高级-03 七种join查询</a>
+      <a class="article-title" href="/2020/02/29/mysql-senior-03-seven-join-queries/">Mysql 8 高级-03 七种join查询</a>
     </h1>
   
 
@@ -626,338 +955,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/02/29/mysql-senior-03-seven-join-queries/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql-senior-02-execution-order-of-sql-statements" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/28/mysql-senior-02-execution-order-of-sql-statements/">Mysql高级-02 SQL语句的执行顺序</a>
-    </h1>
-  
-
-        
-        
-<a href="/2020/02/28/mysql-senior-02-execution-order-of-sql-statements/" class="archive-article-date">
-  	<time datetime="2020-02-28T14:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-手写SQL"><a href="#1-手写SQL" class="headerlink" title="1.手写SQL"></a>1.手写<code>SQL</code></h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span></span><br><span class="line">     &lt;select_list&gt;</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">     &lt;left_table&gt; &lt;join_type&gt;</span><br><span class="line"><span class="keyword">join</span> &lt;right_table&gt; <span class="keyword">on</span> &lt;join_condition&gt;</span><br><span class="line"><span class="keyword">where</span> </span><br><span class="line">     &lt;where_condition&gt;</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span></span><br><span class="line">     &lt;group_by_list&gt;</span><br><span class="line"><span class="keyword">having</span></span><br><span class="line">     &lt;having_confition&gt;</span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span></span><br><span class="line">     &lt;order_by_condition&gt;</span><br><span class="line"><span class="keyword">limit</span> &lt;limit_number&gt;</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2020/02/28/mysql-senior-02-execution-order-of-sql-statements/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/28/mysql-senior-02-execution-order-of-sql-statements/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql-senior-01-architecture-introduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/25/mysql-senior-01-architecture-introduction/">Mysql高级-01 架构介绍</a>
-    </h1>
-  
-
-        
-        
-<a href="/2020/02/25/mysql-senior-01-architecture-introduction/" class="archive-article-date">
-  	<time datetime="2020-02-25T09:55:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-Mysql逻辑架构介绍"><a href="#1-Mysql逻辑架构介绍" class="headerlink" title="1.Mysql逻辑架构介绍"></a>1.<code>Mysql</code>逻辑架构介绍</h3><p>​     和其他数据库相比，mysql有点与众不同，它的架构可以在多种不同的场景中应用并发挥良好的作用，主要体现在储存引擎的架构上，插拔式的储存引擎将处理和其他的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需要和实际需要选择合适的存储引擎。</p>
-<p><img src="/image/mysql/image-20200229101759889.png" alt></p>
-<p>从上图可知，MySQL的逻辑框架主要分为四层：</p>
-        
-          <a class="article-more-a" href="/2020/02/25/mysql-senior-01-architecture-introduction/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/25/mysql-senior-01-architecture-introduction/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-spring-cloud-base-07-config" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/01/spring-cloud-base-07-config/">Spring Cloud-07 使用Spring Cloud Config统一管理微服务配置</a>
-    </h1>
-  
-
-        
-        
-<a href="/2019/12/01/spring-cloud-base-07-config/" class="archive-article-date">
-  	<time datetime="2019-12-01T02:20:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="string">JDK：Spring</span> <span class="string">Cloud官方建议使用JDK</span> <span class="number">1.8</span><span class="string">;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Boot：笔者使用Spring</span> <span class="string">Boot</span> <span class="number">2.1</span><span class="number">.10</span><span class="string">.RELEASE;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Cloud：笔者使用Spring</span> <span class="string">Cloud</span>  <span class="string">Greenwich.SR3</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Maven：笔者使用Maven</span> <span class="number">3.6</span><span class="number">.1</span><span class="string">构建项目；</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="1-为什么要统一管理微服务配置"><a href="#1-为什么要统一管理微服务配置" class="headerlink" title="1.为什么要统一管理微服务配置"></a>1.为什么要统一管理微服务配置</h3><p>​        对于传统的单体应用，常使用配置文件管理所有配置。例如一个Spring Boot开发的单体应用，可将配置内容放在<code>application.yml</code>文件中。如果需要切换环境，可设置多个Profile，并在启动应用时指定<code>spring.profiles.active={profile}</code>。</p>
-<p>​      然而，在微服务架构中，微服务的配置管理一般有以下需求：</p>
-        
-          <a class="article-more-a" href="/2019/12/01/spring-cloud-base-07-config/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Config</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/01/spring-cloud-base-07-config/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-spring-cloud-base-06-zuul" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/27/spring-cloud-base-06-zuul/">Spring Cloud-06 使用Zuul构建微服务网关</a>
-    </h1>
-  
-
-        
-        
-<a href="/2019/11/27/spring-cloud-base-06-zuul/" class="archive-article-date">
-  	<time datetime="2019-11-27T03:24:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="string">JDK：Spring</span> <span class="string">Cloud官方建议使用JDK</span> <span class="number">1.8</span><span class="string">;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Boot：笔者使用Spring</span> <span class="string">Boot</span> <span class="number">2.1</span><span class="number">.10</span><span class="string">.RELEASE;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Cloud：笔者使用Spring</span> <span class="string">Cloud</span>  <span class="string">Greenwich.SR3</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Maven：笔者使用Maven</span> <span class="number">3.6</span><span class="number">.1</span><span class="string">构建项目；</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="1-为什么要使用微服务网关"><a href="#1-为什么要使用微服务网关" class="headerlink" title="1. 为什么要使用微服务网关"></a>1. 为什么要使用微服务网关</h3><p>​       经过前文的讲解，微服务架构已经初具雏形，但还有一些问题——不同的微服务一般会有不同的网络地址，而外部客户端（例如手机<code>APP</code>）可能需要调用多个服务的接口才能完成一个业务需求。例如一个电影购票的手机<code>APP</code>，可能调用多个微服务的接口才能完成一次购票的业务流程，</p>
-<p>如下图所示</p>
-        
-          <a class="article-more-a" href="/2019/11/27/spring-cloud-base-06-zuul/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Zuul</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/27/spring-cloud-base-06-zuul/">展开全文 >></a>
         </p>
       
 
@@ -1104,15 +1101,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Feign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1121,10 +1122,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Hystrix</a>
               </li>
             
             <div class="clearfix"></div>
