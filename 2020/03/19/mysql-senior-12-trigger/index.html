@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322211730913.png">
 <meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322214800960.png">
 <meta property="og:image" content="http://yoursite.com/image/common/superdevops.jpg">
-<meta property="og:updated_time" content="2020-03-22T14:13:05.729Z">
+<meta property="og:updated_time" content="2020-03-22T14:16:28.616Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql 8 高级-12 触发器">
 <meta name="twitter:description" content="1. 触发器介绍​    MySQL的触发器和存储过程一样，都是嵌入到MySQL的一段程序。触发器是由事件来触发某个操作，这些事件包括INSERT、UPDATAE和DELETE语句。如果定义了触发程序，当数据库执行这些语句的时候就会激发触发器执行相应的操作，触发程序是与表有关的命名数据库对象，当表上出现特定事件时，将激活该对象。        ​        触发器（trigger）是一个特殊的">
@@ -234,7 +234,7 @@
 
 <p><img src="/image/mysql/image-20200322214800960.png" alt="image-20200322214800960"></p>
 <p>​      从上面的执行结果可以得知：TRIGGER_SCHEMA表示触发器所在的数据库；TRIGGER_NAME后面是触发器的名称；EVENT_OBJECT_TABLE表示在哪个数据表上触发；ACTION_STATEMENT表示触发器触发的时候执行的具体操作；ACTION_ORIENTATION是ROW，表示在每条记录上都触发；ACTION_TIMING表示触发的时刻是AFTER；剩下的是和系统相关的信息。</p>
-<h3 id="4-删除触发器"><a href="#4-删除触发器" class="headerlink" title="4.  删除触发器"></a>4.  删除触发器</h3><p>使用DROP TRIGGER语句可以删除MySQL中已经定义的触发器，删除触发器语句的基本语法格式如下：c</p>
+<h3 id="4-删除触发器"><a href="#4-删除触发器" class="headerlink" title="4.  删除触发器"></a>4.  删除触发器</h3><p>使用DROP TRIGGER语句可以删除MySQL中已经定义的触发器，删除触发器语句的基本语法格式如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drop trigger [schema_name.]trigger_name</span><br></pre></td></tr></table></figure>
 
 <p>其中，schema_name表示数据库名称，是可选的。如果省略了schema，将从当前数据库中舍弃触发程序；trigger_name是要删除的触发器的名称。</p>
@@ -521,10 +521,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Feign</a>
               </li>
              
@@ -533,11 +529,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Config</a>
+                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
             
             <div class="clearfix"></div>
