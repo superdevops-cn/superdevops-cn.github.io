@@ -154,6 +154,800 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-mysql-senior-19-master-slave-replication" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/31/mysql-senior-19-master-slave-replication/">Mysql 8 高级-19 MySql主从复制</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/31/mysql-senior-19-master-slave-replication/" class="archive-article-date">
+  	<time datetime="2020-03-31T12:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-复制概述"><a href="#1-复制概述" class="headerlink" title="1. 复制概述"></a>1. 复制概述</h3><p>复制是指将主数据库的DDL 和 DML 操作通过二进制日志传到从库服务器中，然后在从库上对这些日志重新执行（也叫重做），从而使得从库和主库的数据保持同步。</p>
+<p>MySQL支持一台主库同时向多台从库进行复制， 从库同时也可以作为其他从服务器的主库，实现链状复制。</p>
+<h3 id="2-复制原理"><a href="#2-复制原理" class="headerlink" title="2. 复制原理"></a>2. 复制原理</h3><p>MySQL 的主从复制原理如下。</p>
+<p><img src="/image/mysql/19/190001.png" alt="1554423698190"> </p>
+<p>从上层来看，复制分成三步：</p>
+<ul>
+<li><p>Master 主库在事务提交时，会把数据变更作为时间 Events 记录在二进制日志文件 Binlog 中。</p>
+</li>
+<li><p>主库推送二进制日志文件 Binlog 中的日志事件到从库的中继日志 Relay Log 。</p>
+</li>
+<li><p>slave重做中继日志中的事件，将改变反映它自己的数据。</p>
+</li>
+</ul>
+<h3 id="3-复制优势"><a href="#3-复制优势" class="headerlink" title="3. 复制优势"></a>3. 复制优势</h3><p>MySQL 复制的有点主要包含以下三个方面：</p>
+<ul>
+<li><p>主库出现问题，可以快速切换到从库提供服务。</p>
+</li>
+<li><p>可以在从库上执行查询操作，从主库中更新，实现读写分离，降低主库的访问压力。</p>
+</li>
+<li><p>可以在从库中执行备份，以避免备份期间影响主库的服务。</p>
+</li>
+</ul>
+<h3 id="4-搭建步骤"><a href="#4-搭建步骤" class="headerlink" title="4. 搭建步骤"></a>4. 搭建步骤</h3><h4 id="4-1-master"><a href="#4-1-master" class="headerlink" title="4.1 master"></a>4.1 master</h4><p>1） 查找配置文件所在位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find  / -name &apos;my.cnf&apos;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/19/190002.png" alt="image-20200421194803500"></p>
+<p>2)在master 的配置文件（/etc/my.cnf）中，配置如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#mysql 服务ID,保证整个集群环境中唯一</span><br><span class="line">server-id=1</span><br><span class="line"></span><br><span class="line">#mysql binlog 日志的存储路径和文件名</span><br><span class="line">log-bin=/var/lib/mysql/mysqlbin</span><br><span class="line"></span><br><span class="line">#错误日志,默认已经开启</span><br><span class="line">#log-err</span><br><span class="line"></span><br><span class="line">#mysql的安装目录</span><br><span class="line">#basedir</span><br><span class="line"></span><br><span class="line">#mysql的临时目录</span><br><span class="line">#tmpdir</span><br><span class="line"></span><br><span class="line">#mysql的数据存放目录</span><br><span class="line">#datadir</span><br><span class="line"></span><br><span class="line">#是否只读,1 代表只读, 0 代表读写</span><br><span class="line">read-only=0</span><br><span class="line"></span><br><span class="line">#忽略的数据, 指不需要同步的数据库</span><br><span class="line">binlog-ignore-db=mysql</span><br><span class="line"></span><br><span class="line">#指定同步的数据库</span><br><span class="line">#binlog-do-db=db01</span><br></pre></td></tr></table></figure>
+
+<p>3） 执行完毕之后，需要重启Mysql：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart;</span><br></pre></td></tr></table></figure>
+
+<p>4） 创建同步数据的账户，并且进行授权操作：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">'rep'</span>@<span class="string">'192.168.10.79'</span> <span class="keyword">identified</span> <span class="keyword">with</span> mysql_native_password <span class="keyword">by</span> <span class="string">'Wxc@1234'</span>;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">replication</span> <span class="keyword">slave</span> <span class="keyword">on</span> *.* <span class="keyword">to</span> <span class="string">'rep'</span>@<span class="string">'192.168.10.79'</span>;</span><br><span class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</span><br></pre></td></tr></table></figure>
+
+<p>5） 查看master状态：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">master</span> <span class="keyword">status</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/19/190003.png" alt="image-20200511222619855"> </p>
+<p>字段含义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">File : 从哪个日志文件开始推送日志文件 </span><br><span class="line">Position ： 从哪个位置开始推送日志</span><br><span class="line">Binlog_Ignore_DB : 指定不需要同步的数据库</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-2-slave"><a href="#4-2-slave" class="headerlink" title="4.2 slave"></a>4.2 slave</h4><p>1） 在 slave 端配置文件中，配置如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#mysql服务端ID,唯一</span><br><span class="line">server-id=2</span><br><span class="line"></span><br><span class="line">#指定binlog日志</span><br><span class="line">log-bin=/var/lib/mysql/mysqlbin</span><br></pre></td></tr></table></figure>
+
+<p>2）  执行完毕之后，需要重启Mysql：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart;</span><br></pre></td></tr></table></figure>
+
+<p>3） 执行如下指令 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">change master to master_host= &apos;192.168.10.63&apos;, master_user=&apos;rep&apos;, master_password=&apos;Wxc@1234&apos;, master_log_file=&apos;mysqlbin.000005&apos;, master_log_pos=1038;</span><br></pre></td></tr></table></figure>
+
+<p>指定当前从库对应的主库的IP地址，用户名，密码，从哪个日志文件开始的那个位置开始同步推送日志。</p>
+<p>4） 开启同步操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">start slave;</span><br><span class="line">##查看状态</span><br><span class="line">show slave status \G</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/19/190004.png" alt="image-20200511222717312"> </p>
+<p>5） 停止同步操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop slave;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-3-验证同步操作"><a href="#4-3-验证同步操作" class="headerlink" title="4.3 验证同步操作"></a>4.3 验证同步操作</h4><p>1） 在主库中创建数据库，创建表，并插入数据 ：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> db01;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> db01;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">not</span> <span class="literal">null</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	sex <span class="built_in">varchar</span>(<span class="number">1</span>),</span><br><span class="line">	primary <span class="keyword">key</span> (<span class="keyword">id</span>)</span><br><span class="line">)<span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">user</span>(<span class="keyword">id</span>,<span class="keyword">name</span>,sex) <span class="keyword">values</span>(<span class="literal">null</span>,<span class="string">'Tom'</span>,<span class="string">'1'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">user</span>(<span class="keyword">id</span>,<span class="keyword">name</span>,sex) <span class="keyword">values</span>(<span class="literal">null</span>,<span class="string">'Trigger'</span>,<span class="string">'0'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">user</span>(<span class="keyword">id</span>,<span class="keyword">name</span>,sex) <span class="keyword">values</span>(<span class="literal">null</span>,<span class="string">'Dawn'</span>,<span class="string">'1'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>2） 在从库中查询数据，进行验证 ：</p>
+<p>在从库中，可以查看到刚才创建的数据库：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/19/190005.png" alt="image-20200511223006148"></p>
+<p>在该数据库中，查询user表中的数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from  user;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/19/190006.png" alt="image-20200511223105481"> </p>
+<h3 id="666-彩蛋"><a href="#666-彩蛋" class="headerlink" title="666. 彩蛋"></a>666. 彩蛋</h3><p>请大家持续关注公众号：Java橙序猿</p>
+<p> <img src="/image/common/superdevops.jpg" alt> </p>
+<p>关注博客：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://superdevops.cn</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/31/mysql-senior-19-master-slave-replication/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-18-log-in-mysql" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/29/mysql-senior-18-log-in-mysql/">Mysql 8 高级-18 MySql日志</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/29/mysql-senior-18-log-in-mysql/" class="archive-article-date">
+  	<time datetime="2020-03-29T11:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​       在任何一种数据库中，都会有各种各样的日志，记录着数据库工作的方方面面，以帮助数据库管理员追踪数据库曾经发生过的各种事件。MySQL 也不例外，在 MySQL 中，有 4 种不同的日志，分别是错误日志、二进制日志（BINLOG 日志）、查询日志和慢查询日志，这些日志记录着数据库在不同方面的踪迹。</p>
+<h3 id="1-错误日志"><a href="#1-错误日志" class="headerlink" title="1. 错误日志"></a>1. 错误日志</h3><p>   错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。当数据库出现任何故障导致无法正常使用时，可以首先查看此日志。</p>
+<p>​       该日志是默认开启的 ， 默认存放目录为 mysql 的数据目录（var/lib/mysql）, 默认的日志文件名为hostname.err（hostname是主机名）。</p>
+        
+          <a class="article-more-a" href="/2020/03/29/mysql-senior-18-log-in-mysql/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/29/mysql-senior-18-log-in-mysql/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-17-common-tools-in-mysql" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/27/mysql-senior-17-common-tools-in-mysql/">Mysql 8 高级-17 MySql中常用工具</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/27/mysql-senior-17-common-tools-in-mysql/" class="archive-article-date">
+  	<time datetime="2020-03-27T10:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-mysql"><a href="#1-mysql" class="headerlink" title="1. mysql"></a>1. mysql</h3><p>该mysql不是指mysql服务，而是指mysql的客户端工具。</p>
+<p>语法 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql [options] [database]</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-1-连接选项"><a href="#1-1-连接选项" class="headerlink" title="1.1 连接选项"></a>1.1 连接选项</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">参数 ： </span><br><span class="line">	-u, --user=name			指定用户名</span><br><span class="line">	-p, --password[=name]	指定密码</span><br><span class="line">	-h, --host=name			指定服务器IP或域名</span><br><span class="line">	-P, --port=3306		    指定连接端口</span><br><span class="line"></span><br><span class="line">示例 ：</span><br><span class="line">	mysql -h 127.0.0.1 -P 3306 -u root -p</span><br><span class="line">	</span><br><span class="line">	mysql -h127.0.0.1 -P3306 -uroot -p2143</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2020/03/27/mysql-senior-17-common-tools-in-mysql/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/27/mysql-senior-17-common-tools-in-mysql/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-16-common-sql-skills" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/25/mysql-senior-16-common-sql-skills/">Mysql 8 高级-16 常见SQL技巧</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/25/mysql-senior-16-common-sql-skills/" class="archive-article-date">
+  	<time datetime="2020-03-25T11:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-SQL执行顺序"><a href="#1-SQL执行顺序" class="headerlink" title="1. SQL执行顺序"></a>1. SQL执行顺序</h3><h4 id="1-1编写顺序"><a href="#1-1编写顺序" class="headerlink" title="1.1编写顺序"></a>1.1编写顺序</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span></span><br><span class="line">	&lt;<span class="keyword">select</span> <span class="keyword">list</span>&gt;</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">	&lt;left_table&gt; &lt;join_type&gt;</span><br><span class="line"><span class="keyword">JOIN</span></span><br><span class="line">	&lt;right_table&gt; <span class="keyword">ON</span> &lt;join_condition&gt;</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">	&lt;where_condition&gt;</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">	&lt;group_by_list&gt;</span><br><span class="line"><span class="keyword">HAVING</span></span><br><span class="line">	&lt;having_condition&gt;</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span></span><br><span class="line">	&lt;order_by_condition&gt;</span><br><span class="line"><span class="keyword">LIMIT</span></span><br><span class="line">	&lt;limit_params&gt;</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2020/03/25/mysql-senior-16-common-sql-skills/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/25/mysql-senior-16-common-sql-skills/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-15-lock-optimalize" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/23/mysql-senior-15-lock-optimalize/">Mysql 8 高级-15 mysql锁优化</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/23/mysql-senior-15-lock-optimalize/" class="archive-article-date">
+  	<time datetime="2020-03-23T09:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-锁概述"><a href="#1-锁概述" class="headerlink" title="1.锁概述"></a>1.锁概述</h3><p>锁是计算机协调多个进程或线程并发访问某一资源的机制（避免争抢）。</p>
+<p>在数据库中，除传统的计算资源（如 CPU、RAM、I/O 等）的争用以外，数据也是一种供许多用户共享的资源。如何保证数据并发访问的一致性、有效性是所有数据库必须解决的一个问题，锁冲突也是影响数据库并发访问性能的一个重要因素。从这个角度来说，锁对数据库而言显得尤其重要，也更加复杂。</p>
+<h3 id="2-锁分类"><a href="#2-锁分类" class="headerlink" title="2. 锁分类"></a>2. 锁分类</h3><p>从对数据操作的粒度分 ： </p>
+<p>1） 表锁：操作时，会锁定整个表。</p>
+<p>2） 行锁：操作时，会锁定当前操作行。</p>
+<p>从对数据操作的类型分：</p>
+<p>1） 读锁（共享锁）：针对同一份数据，多个读操作可以同时进行而不会互相影响。</p>
+<p>2） 写锁（排它锁）：当前操作没有完成之前，它会阻断其他写锁和读锁。</p>
+        
+          <a class="article-more-a" href="/2020/03/23/mysql-senior-15-lock-optimalize/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/23/mysql-senior-15-lock-optimalize/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-14-production-environment-optimalize" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/21/mysql-senior-14-production-environment-optimalize/">Mysql 8 高级-14 mysql生产环境优化</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/21/mysql-senior-14-production-environment-optimalize/" class="archive-article-date">
+  	<time datetime="2020-03-21T13:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前面的文章中，我们介绍了很多数据库的优化措施。但是在实际生产环境中，由于数据库本身的性能局限，就必须要对前台的应用进行一些优化，来降低数据库的访问压力。</p>
+<h3 id="1-应用优化"><a href="#1-应用优化" class="headerlink" title="1. 应用优化"></a>1. 应用优化</h3><h4 id="1-1-使用连接池"><a href="#1-1-使用连接池" class="headerlink" title="1.1 使用连接池"></a>1.1 使用连接池</h4><p>对于访问数据库来说，建立连接的代价是比较昂贵的，因为我们频繁的创建关闭连接，是比较耗费资源的，我们有必要建立 数据库连接池，以提高访问的性能。</p>
+        
+          <a class="article-more-a" href="/2020/03/21/mysql-senior-14-production-environment-optimalize/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/21/mysql-senior-14-production-environment-optimalize/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-13-sql-optimalize" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/19/mysql-senior-13-sql-optimalize/">Mysql 8 高级-13 sql优化方式</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/19/mysql-senior-13-sql-optimalize/" class="archive-article-date">
+  	<time datetime="2020-03-19T12:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​     在应用的的开发过程中，由于初期数据量小，开发人员写 SQL 语句时更重视功能上的实现，但是当应用系统正式上线后，随着生产数据量的急剧增长，很多 SQL 语句开始逐渐显露出性能问题，对生产的影响也越来越大，此时这些有问题的 SQL 语句就成为整个系统性能的瓶颈，因此我们必须要对它们进行优化，本章将详细介绍在 MySQL 中优化 SQL 语句的方法。</p>
+<p>​     当面对一个有 SQL 性能问题的数据库时，我们应该从何处入手来进行系统的分析，使得能够尽快定位问题 SQL 并尽快解决问题。</p>
+<h3 id="1-查看SQL执行频率"><a href="#1-查看SQL执行频率" class="headerlink" title="1. 查看SQL执行频率"></a>1. 查看SQL执行频率</h3><p>​    MySQL 客户端连接成功后，通过 show [session|global] status 命令可以提供服务器状态信息。show [session|global] status 可以根据需要加上参数“session”或者“global”来显示 session 级（当前连接）的计结果和 global 级（自数据库上次启动至今）的统计结果。如果不写，默认使用参数是“session”。</p>
+<p>下面的命令显示了当前 session 中所有统计参数的值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show status like &apos;Com_______&apos;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/13/130001.png" alt="image-20200401221310219"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show status like &apos;Innodb_rows_%&apos;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/13/130002.png" alt="image-20200401221356215"></p>
+<p>Com_xxx 表示每个 xxx 语句执行的次数，我们通常比较关心的是以下几个统计参数。</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Com_select</td>
+<td>执行 select 操作的次数，一次查询只累加 1。</td>
+</tr>
+<tr>
+<td align="left">Com_insert</td>
+<td>执行 INSERT 操作的次数，对于批量插入的 INSERT 操作，只累加一次。</td>
+</tr>
+<tr>
+<td align="left">Com_update</td>
+<td>执行 UPDATE 操作的次数。</td>
+</tr>
+<tr>
+<td align="left">Com_delete</td>
+<td>执行 DELETE 操作的次数。</td>
+</tr>
+<tr>
+<td align="left">Innodb_rows_read</td>
+<td>select 查询返回的行数。</td>
+</tr>
+<tr>
+<td align="left">Innodb_rows_inserted</td>
+<td>执行 INSERT 操作插入的行数。</td>
+</tr>
+<tr>
+<td align="left">Innodb_rows_updated</td>
+<td>执行 UPDATE 操作更新的行数。</td>
+</tr>
+<tr>
+<td align="left">Innodb_rows_deleted</td>
+<td>执行 DELETE 操作删除的行数。</td>
+</tr>
+<tr>
+<td align="left">Connections</td>
+<td>试图连接 MySQL 服务器的次数。</td>
+</tr>
+<tr>
+<td align="left">Uptime</td>
+<td>服务器工作时间。</td>
+</tr>
+<tr>
+<td align="left">Slow_queries</td>
+<td>慢查询的次数。</td>
+</tr>
+</tbody></table>
+<p>Com_***      :  这些参数对于所有存储引擎的表操作都会进行累计。</p>
+<p>Innodb_*** :  这几个参数只是针对InnoDB 存储引擎的，累加的算法也略有不同。</p>
+<h3 id="2-定位低效率执行SQL"><a href="#2-定位低效率执行SQL" class="headerlink" title="2.定位低效率执行SQL"></a>2.定位低效率执行SQL</h3><p>可以通过以下两种方式定位执行效率较低的 SQL 语句。</p>
+<ul>
+<li>慢查询日志 : 通过慢查询日志定位那些执行效率较低的 SQL 语句，用–log-slow-queries[=file_name]选项启动时，mysqld 写一个包含所有执行时间超过 long_query_time 秒的 SQL 语句的日志文件。具体可以查看本书第 26 章中日志管理的相关部分。</li>
+<li>show processlist  : 慢查询日志在查询结束以后才纪录，所以在应用反映执行效率出现问题的时候查询慢查询日志并不能定位问题，可以使用show processlist命令查看当前MySQL在进行的线程，包括线程的状态、是否锁表等，可以实时地查看 SQL 的执行情况，同时对一些锁表操作进行优化。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show processlist;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/13/130003.png" alt="image-20200401221544947"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1） id列，用户登录mysql时，系统分配的"connection_id"，可以使用函数connection_id()查看</span><br><span class="line"></span><br><span class="line">2） user列，显示当前用户。如果不是root，这个命令就只显示用户权限范围的sql语句</span><br><span class="line"></span><br><span class="line">3） host列，显示这个语句是从哪个ip的哪个端口上发的，可以用来跟踪出现问题语句的用户</span><br><span class="line"></span><br><span class="line">4） db列，显示这个进程目前连接的是哪个数据库</span><br><span class="line"></span><br><span class="line">5） command列，显示当前连接的执行的命令，一般取值为休眠（sleep），查询（query），连接（connect）等</span><br><span class="line"></span><br><span class="line">6） time列，显示这个状态持续的时间，单位是秒</span><br><span class="line"></span><br><span class="line">7） state列，显示使用当前连接的sql语句的状态，很重要的列。state描述的是语句执行中的某一个状态。一个sql语句，以查询为例，可能需要经过copying to tmp table、sorting result、sending data等状态才可以完成</span><br><span class="line"></span><br><span class="line">8） info列，显示这个sql语句，是判断问题语句的一个重要依据</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-show-profile分析SQL"><a href="#3-show-profile分析SQL" class="headerlink" title="3. show profile分析SQL"></a>3. show profile分析SQL</h3><p>Mysql从5.0.37版本开始增加了对 show profiles 和 show profile 语句的支持。show profiles 能够在做SQL优化时帮助我们了解时间都耗费到哪里去了。</p>
+<p>通过 have_profiling 参数，能够看到当前MySQL是否支持profile：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select @@have_profiling;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/13/130004.png" alt="image-20200401223601256"></p>
+<p>默认profiling是关闭的，可以通过set语句在Session级别开启profiling：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select @@profiling;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/13/130005.png" alt="image-20200401223748850"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set profiling=1; //开启profiling 开关；</span><br></pre></td></tr></table></figure>
+
+<p>通过profile，我们能够更清楚地了解SQL执行的过程。</p>
+<p>首先，我们可以执行一系列的操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use staff;</span><br><span class="line"></span><br><span class="line">show tables;</span><br><span class="line"></span><br><span class="line">select * from emp where id &lt; 5;</span><br><span class="line"></span><br><span class="line">select count(*) from emp;</span><br><span class="line"></span><br><span class="line">select sleep(10);</span><br></pre></td></tr></table></figure>
+
+<p>执行完上述命令之后，再执行show profiles 指令， 来查看SQL语句执行的耗时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show profiles;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/13/130006.png" alt="image-20200401224314989"></p>
+<p>通过show  profile for  query  query_id 语句可以查看到该SQL执行过程中每个线程的状态和消耗的时间：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show  profile for  query 5;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/13/130007.png" alt="image-20200401224445502"></p>
+<p>在获取到最消耗时间的线程状态后，MySQL支持进一步选择all、cpu、block io 、context switch、page faults等明细类型类查看MySQL在使用什么资源上耗费了过高的时间。例如，选择查看CPU的耗费时间  ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show  profile cpu for  query 5;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/mysql/13/130008.png" alt="image-20200401224757234"></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Status</td>
+<td>sql 语句执行的状态</td>
+</tr>
+<tr>
+<td>Duration</td>
+<td>sql 执行过程中每一个步骤的耗时</td>
+</tr>
+<tr>
+<td>CPU_user</td>
+<td>当前用户占有的cpu</td>
+</tr>
+<tr>
+<td>CPU_system</td>
+<td>系统占有的cpu</td>
+</tr>
+</tbody></table>
+<h3 id="4-trace分析优化器执行计划"><a href="#4-trace分析优化器执行计划" class="headerlink" title="4. trace分析优化器执行计划"></a>4. trace分析优化器执行计划</h3><p>​      MySQL5.6提供了对SQL的跟踪trace, 通过trace文件能够进一步了解为什么优化器选择A计划, 而不是选择B计划。</p>
+<p>​      打开trace ， 设置格式为 JSON，并设置trace最大能够使用的内存大小，避免解析过程中因为默认内存过小而不能够完整展示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SET optimizer_trace=&quot;enabled=on&quot;,end_markers_in_json=on;</span><br><span class="line">set optimizer_trace_max_mem_size=1000000;</span><br></pre></td></tr></table></figure>
+
+<p>执行SQL语句 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from emp where id &lt; 4;</span><br></pre></td></tr></table></figure>
+
+<p>最后， 检查information_schema.optimizer_trace就可以知道MySQL是如何执行SQL的 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from information_schema.optimizer_trace\G;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from information_schema.optimizer_trace\G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">                            QUERY: select * from emp where id &lt; 4</span><br><span class="line">                            TRACE: &#123;</span><br><span class="line">  &quot;steps&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;join_preparation&quot;: &#123;</span><br><span class="line">        &quot;select#&quot;: 1,</span><br><span class="line">        &quot;steps&quot;: [</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;expanded_query&quot;: &quot;/* select#1 */ select `emp`.`id` AS `id`,`emp`.`name` AS `name`,`emp`.`age` AS `age`,`emp`.`salary` AS `salary` from `emp` where (`emp`.`id` &lt; 4)&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        ] /* steps */</span><br><span class="line">      &#125; /* join_preparation */</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;join_optimization&quot;: &#123;</span><br><span class="line">        &quot;select#&quot;: 1,</span><br><span class="line">        &quot;steps&quot;: [</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;condition_processing&quot;: &#123;</span><br><span class="line">              &quot;condition&quot;: &quot;WHERE&quot;,</span><br><span class="line">              &quot;original_condition&quot;: &quot;(`emp`.`id` &lt; 4)&quot;,</span><br><span class="line">              &quot;steps&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                  &quot;transformation&quot;: &quot;equality_propagation&quot;,</span><br><span class="line">                  &quot;resulting_condition&quot;: &quot;(`emp`.`id` &lt; 4)&quot;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                  &quot;transformation&quot;: &quot;constant_propagation&quot;,</span><br><span class="line">                  &quot;resulting_condition&quot;: &quot;(`emp`.`id` &lt; 4)&quot;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                  &quot;transformation&quot;: &quot;trivial_condition_removal&quot;,</span><br><span class="line">                  &quot;resulting_condition&quot;: &quot;(`emp`.`id` &lt; 4)&quot;</span><br><span class="line">                &#125;</span><br><span class="line">              ] /* steps */</span><br><span class="line">            &#125; /* condition_processing */</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;substitute_generated_columns&quot;: &#123;</span><br><span class="line">            &#125; /* substitute_generated_columns */</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;table_dependencies&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;table&quot;: &quot;`emp`&quot;,</span><br><span class="line">                &quot;row_may_be_null&quot;: false,</span><br><span class="line">                &quot;map_bit&quot;: 0,</span><br><span class="line">                &quot;depends_on_map_bits&quot;: [</span><br><span class="line">                ] /* depends_on_map_bits */</span><br><span class="line">              &#125;</span><br><span class="line">            ] /* table_dependencies */</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;ref_optimizer_key_uses&quot;: [</span><br><span class="line">            ] /* ref_optimizer_key_uses */</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;rows_estimation&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;table&quot;: &quot;`emp`&quot;,</span><br><span class="line">                &quot;range_analysis&quot;: &#123;</span><br><span class="line">                  &quot;table_scan&quot;: &#123;</span><br><span class="line">                    &quot;rows&quot;: 2838321,</span><br><span class="line">                    &quot;cost&quot;: 294457</span><br><span class="line">                  &#125; /* table_scan */,</span><br><span class="line">                  &quot;potential_range_indexes&quot;: [</span><br><span class="line">                    &#123;</span><br><span class="line">                      &quot;index&quot;: &quot;PRIMARY&quot;,</span><br><span class="line">                      &quot;usable&quot;: true,</span><br><span class="line">                      &quot;key_parts&quot;: [</span><br><span class="line">                        &quot;id&quot;</span><br><span class="line">                      ] /* key_parts */</span><br><span class="line">                    &#125;</span><br><span class="line">                  ] /* potential_range_indexes */,</span><br><span class="line">                  &quot;setup_range_conditions&quot;: [</span><br><span class="line">                  ] /* setup_range_conditions */,</span><br><span class="line">                  &quot;group_index_range&quot;: &#123;</span><br><span class="line">                    &quot;chosen&quot;: false,</span><br><span class="line">                    &quot;cause&quot;: &quot;not_group_by_or_distinct&quot;</span><br><span class="line">                  &#125; /* group_index_range */,</span><br><span class="line">                  &quot;skip_scan_range&quot;: &#123;</span><br><span class="line">                    &quot;potential_skip_scan_indexes&quot;: [</span><br><span class="line">                      &#123;</span><br><span class="line">                        &quot;index&quot;: &quot;PRIMARY&quot;,</span><br><span class="line">                        &quot;usable&quot;: false,</span><br><span class="line">                        &quot;cause&quot;: &quot;query_references_nonkey_column&quot;</span><br><span class="line">                      &#125;</span><br><span class="line">                    ] /* potential_skip_scan_indexes */</span><br><span class="line">                  &#125; /* skip_scan_range */,</span><br><span class="line">                  &quot;analyzing_range_alternatives&quot;: &#123;</span><br><span class="line">                    &quot;range_scan_alternatives&quot;: [</span><br><span class="line">                      &#123;</span><br><span class="line">                        &quot;index&quot;: &quot;PRIMARY&quot;,</span><br><span class="line">                        &quot;ranges&quot;: [</span><br><span class="line">                          &quot;id &lt; 4&quot;</span><br><span class="line">                        ] /* ranges */,</span><br><span class="line">                        &quot;index_dives_for_eq_ranges&quot;: true,</span><br><span class="line">                        &quot;rowid_ordered&quot;: true,</span><br><span class="line">                        &quot;using_mrr&quot;: false,</span><br><span class="line">                        &quot;index_only&quot;: false,</span><br><span class="line">                        &quot;rows&quot;: 3,</span><br><span class="line">                        &quot;cost&quot;: 1.1521,</span><br><span class="line">                        &quot;chosen&quot;: true</span><br><span class="line">                      &#125;</span><br><span class="line">                    ] /* range_scan_alternatives */,</span><br><span class="line">                    &quot;analyzing_roworder_intersect&quot;: &#123;</span><br><span class="line">                      &quot;usable&quot;: false,</span><br><span class="line">                      &quot;cause&quot;: &quot;too_few_roworder_scans&quot;</span><br><span class="line">                    &#125; /* analyzing_roworder_intersect */</span><br><span class="line">                  &#125; /* analyzing_range_alternatives */,</span><br><span class="line">                  &quot;chosen_range_access_summary&quot;: &#123;</span><br><span class="line">                    &quot;range_access_plan&quot;: &#123;</span><br><span class="line">                      &quot;type&quot;: &quot;range_scan&quot;,</span><br><span class="line">                      &quot;index&quot;: &quot;PRIMARY&quot;,</span><br><span class="line">                      &quot;rows&quot;: 3,</span><br><span class="line">                      &quot;ranges&quot;: [</span><br><span class="line">                        &quot;id &lt; 4&quot;</span><br><span class="line">                      ] /* ranges */</span><br><span class="line">                    &#125; /* range_access_plan */,</span><br><span class="line">                    &quot;rows_for_plan&quot;: 3,</span><br><span class="line">                    &quot;cost_for_plan&quot;: 1.1521,</span><br><span class="line">                    &quot;chosen&quot;: true</span><br><span class="line">                  &#125; /* chosen_range_access_summary */</span><br><span class="line">                &#125; /* range_analysis */</span><br><span class="line">              &#125;</span><br><span class="line">            ] /* rows_estimation */</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;considered_execution_plans&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;plan_prefix&quot;: [</span><br><span class="line">                ] /* plan_prefix */,</span><br><span class="line">                &quot;table&quot;: &quot;`emp`&quot;,</span><br><span class="line">                &quot;best_access_path&quot;: &#123;</span><br><span class="line">                  &quot;considered_access_paths&quot;: [</span><br><span class="line">                    &#123;</span><br><span class="line">                      &quot;rows_to_scan&quot;: 3,</span><br><span class="line">                      &quot;access_type&quot;: &quot;range&quot;,</span><br><span class="line">                      &quot;range_details&quot;: &#123;</span><br><span class="line">                        &quot;used_index&quot;: &quot;PRIMARY&quot;</span><br><span class="line">                      &#125; /* range_details */,</span><br><span class="line">                      &quot;resulting_rows&quot;: 3,</span><br><span class="line">                      &quot;cost&quot;: 1.4521,</span><br><span class="line">                      &quot;chosen&quot;: true</span><br><span class="line">                    &#125;</span><br><span class="line">                  ] /* considered_access_paths */</span><br><span class="line">                &#125; /* best_access_path */,</span><br><span class="line">                &quot;condition_filtering_pct&quot;: 100,</span><br><span class="line">                &quot;rows_for_plan&quot;: 3,</span><br><span class="line">                &quot;cost_for_plan&quot;: 1.4521,</span><br><span class="line">                &quot;chosen&quot;: true</span><br><span class="line">              &#125;</span><br><span class="line">            ] /* considered_execution_plans */</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;attaching_conditions_to_tables&quot;: &#123;</span><br><span class="line">              &quot;original_condition&quot;: &quot;(`emp`.`id` &lt; 4)&quot;,</span><br><span class="line">              &quot;attached_conditions_computation&quot;: [</span><br><span class="line">              ] /* attached_conditions_computation */,</span><br><span class="line">              &quot;attached_conditions_summary&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                  &quot;table&quot;: &quot;`emp`&quot;,</span><br><span class="line">                  &quot;attached&quot;: &quot;(`emp`.`id` &lt; 4)&quot;</span><br><span class="line">                &#125;</span><br><span class="line">              ] /* attached_conditions_summary */</span><br><span class="line">            &#125; /* attaching_conditions_to_tables */</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;finalizing_table_conditions&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;table&quot;: &quot;`emp`&quot;,</span><br><span class="line">                &quot;original_table_condition&quot;: &quot;(`emp`.`id` &lt; 4)&quot;,</span><br><span class="line">                &quot;final_table_condition   &quot;: &quot;(`emp`.`id` &lt; 4)&quot;</span><br><span class="line">              &#125;</span><br><span class="line">            ] /* finalizing_table_conditions */</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;refine_plan&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;table&quot;: &quot;`emp`&quot;</span><br><span class="line">              &#125;</span><br><span class="line">            ] /* refine_plan */</span><br><span class="line">          &#125;</span><br><span class="line">        ] /* steps */</span><br><span class="line">      &#125; /* join_optimization */</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;join_execution&quot;: &#123;</span><br><span class="line">        &quot;select#&quot;: 1,</span><br><span class="line">        &quot;steps&quot;: [</span><br><span class="line">        ] /* steps */</span><br><span class="line">      &#125; /* join_execution */</span><br><span class="line">    &#125;</span><br><span class="line">  ] /* steps */</span><br><span class="line">&#125;</span><br><span class="line">MISSING_BYTES_BEYOND_MAX_MEM_SIZE: 0</span><br><span class="line">          INSUFFICIENT_PRIVILEGES: 0</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="666-彩蛋"><a href="#666-彩蛋" class="headerlink" title="666. 彩蛋"></a>666. 彩蛋</h3><p>请大家持续关注公众号：Java橙序猿</p>
+<p> <img src="/image/common/superdevops.jpg" alt> </p>
+<p>关注博客：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://superdevops.cn</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/19/mysql-senior-13-sql-optimalize/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-mysql-senior-12-trigger" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -402,591 +1196,9 @@
 
 
   
-    <article id="post-mysql-senior-09-query-optimalize" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/12/mysql-senior-09-query-optimalize/">Mysql 8 高级-09 查询优化</a>
-    </h1>
-  
-
-        
-        
-<a href="/2020/03/12/mysql-senior-09-query-optimalize/" class="archive-article-date">
-  	<time datetime="2020-03-12T12:38:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-准备数据"><a href="#1-准备数据" class="headerlink" title="1.准备数据"></a>1.准备数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span>   <span class="keyword">if</span> <span class="keyword">exists</span> <span class="keyword">query</span>;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">query</span></span><br><span class="line">(</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">int</span> auto_increment primary <span class="keyword">key</span>,</span><br><span class="line">    t0 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t1 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t2 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t3 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t4 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t5 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t6 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t7 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t8 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t9 <span class="built_in">varchar</span>(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">)<span class="keyword">engine</span> =<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span> =utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'a0'</span>,<span class="string">'a1'</span>,<span class="string">'a2'</span>,<span class="string">'a3'</span>,<span class="string">'a4'</span>,<span class="string">'a5'</span>,<span class="string">'a6'</span>,<span class="string">'a7'</span>,<span class="string">'a8'</span>,<span class="string">'a9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'b0'</span>,<span class="string">'b1'</span>,<span class="string">'b2'</span>,<span class="string">'b3'</span>,<span class="string">'b4'</span>,<span class="string">'b5'</span>,<span class="string">'b6'</span>,<span class="string">'b7'</span>,<span class="string">'b8'</span>,<span class="string">'b9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'c0'</span>,<span class="string">'c1'</span>,<span class="string">'c2'</span>,<span class="string">'c3'</span>,<span class="string">'c4'</span>,<span class="string">'c5'</span>,<span class="string">'c6'</span>,<span class="string">'c7'</span>,<span class="string">'c8'</span>,<span class="string">'c9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'d0'</span>,<span class="string">'d1'</span>,<span class="string">'d2'</span>,<span class="string">'d3'</span>,<span class="string">'d4'</span>,<span class="string">'d5'</span>,<span class="string">'d6'</span>,<span class="string">'d7'</span>,<span class="string">'d8'</span>,<span class="string">'d9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'e0'</span>,<span class="string">'e1'</span>,<span class="string">'e2'</span>,<span class="string">'e3'</span>,<span class="string">'e4'</span>,<span class="string">'e5'</span>,<span class="string">'e6'</span>,<span class="string">'e7'</span>,<span class="string">'e8'</span>,<span class="string">'e9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'f0'</span>,<span class="string">'f1'</span>,<span class="string">'f2'</span>,<span class="string">'f3'</span>,<span class="string">'f4'</span>,<span class="string">'f5'</span>,<span class="string">'f6'</span>,<span class="string">'f7'</span>,<span class="string">'f8'</span>,<span class="string">'f9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'g0'</span>,<span class="string">'g1'</span>,<span class="string">'g2'</span>,<span class="string">'g3'</span>,<span class="string">'g4'</span>,<span class="string">'g5'</span>,<span class="string">'g6'</span>,<span class="string">'g7'</span>,<span class="string">'g8'</span>,<span class="string">'g9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'h0'</span>,<span class="string">'h1'</span>,<span class="string">'h2'</span>,<span class="string">'h3'</span>,<span class="string">'h4'</span>,<span class="string">'h5'</span>,<span class="string">'h6'</span>,<span class="string">'h7'</span>,<span class="string">'h8'</span>,<span class="string">'h9'</span>);</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2020/03/12/mysql-senior-09-query-optimalize/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/12/mysql-senior-09-query-optimalize/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql-senior-08-index-optimalize" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/10/mysql-senior-08-index-optimalize/">Mysql 8 高级-08 索引优化</a>
-    </h1>
-  
-
-        
-        
-<a href="/2020/03/10/mysql-senior-08-index-optimalize/" class="archive-article-date">
-  	<time datetime="2020-03-10T12:14:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-数据准备"><a href="#1-数据准备" class="headerlink" title="1.数据准备"></a>1.数据准备</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span>  <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> person;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> person</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">id</span>    <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">    <span class="keyword">name</span>  <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    age   <span class="built_in">int</span>          <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    email <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    phone <span class="keyword">long</span>         <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    card  <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    memo  <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">default</span> <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span></span><br><span class="line">  <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span> = utf8mb4;</span><br><span class="line"><span class="comment">###插入数据</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'刘一'</span>,<span class="number">15</span>,<span class="string">'13888131111@qq.com'</span>,<span class="number">13888131111</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'陈二'</span>,<span class="number">25</span>,<span class="string">'13888132222@qq.com'</span>,<span class="number">13888132222</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'张三'</span>,<span class="number">35</span>,<span class="string">'13888133333@qq.com'</span>,<span class="number">13888133333</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'李四'</span>,<span class="number">45</span>,<span class="string">'13888134444@qq.com'</span>,<span class="number">13888134444</span>,<span class="keyword">uuid_short</span>(),<span class="string">'1111'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'王五'</span>,<span class="number">55</span>,<span class="string">'13888135555@qq.com'</span>,<span class="number">13888135555</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'赵六'</span>,<span class="number">65</span>,<span class="string">'13888136666@qq.com'</span>,<span class="number">13888136666</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'孙七'</span>,<span class="number">75</span>,<span class="string">'13888137777@qq.com'</span>,<span class="number">13888137777</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'周八'</span>,<span class="number">85</span>,<span class="string">'13888138888@qq.com'</span>,<span class="number">13888138888</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'吴九'</span>,<span class="number">95</span>,<span class="string">'13888139999@qq.com'</span>,<span class="number">13888139999</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'郑十'</span>,<span class="number">99</span>,<span class="string">'13888130000@qq.com'</span>,<span class="number">13888130000</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">###建立复合索引</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> person__idx_name_age_email</span><br><span class="line">    <span class="keyword">on</span> person (<span class="keyword">name</span>, age, email);</span><br><span class="line"><span class="comment">###建立唯一索引</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">unique</span> <span class="keyword">index</span> person__uindex_phone</span><br><span class="line">    <span class="keyword">on</span> person (card);</span><br><span class="line"><span class="comment">### 普通索引</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> person_memo_index_memo</span><br><span class="line">    <span class="keyword">on</span> person (memo);</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2020/03/10/mysql-senior-08-index-optimalize/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/10/mysql-senior-08-index-optimalize/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql-senior-07-index-analysis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/05/mysql-senior-07-index-analysis/">Mysql 8 高级-07 索引分析</a>
-    </h1>
-  
-
-        
-        
-<a href="/2020/03/05/mysql-senior-07-index-analysis/" class="archive-article-date">
-  	<time datetime="2020-03-05T13:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-单表分析"><a href="#1-单表分析" class="headerlink" title="1.单表分析"></a>1.单表分析</h3><h4 id="1-1准备数据"><a href="#1-1准备数据" class="headerlink" title="1.1准备数据"></a>1.1准备数据</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> article(</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">  author_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  category_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  views <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  comments <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  title <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  <span class="keyword">content</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> article <span class="keyword">values</span>(<span class="literal">null</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="string">'1'</span>,<span class="string">'1'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> article <span class="keyword">values</span>(<span class="literal">null</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="string">'2'</span>,<span class="string">'2'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> article <span class="keyword">values</span>(<span class="literal">null</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="string">'3'</span>,<span class="string">'3'</span>);</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2020/03/05/mysql-senior-07-index-analysis/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/05/mysql-senior-07-index-analysis/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql-senior-06-explain" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/03/mysql-senior-06-explain/">Mysql 8 高级-06 性能优化</a>
-    </h1>
-  
-
-        
-        
-<a href="/2020/03/03/mysql-senior-06-explain/" class="archive-article-date">
-  	<time datetime="2020-03-03T12:14:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-MySQL-Query-Optimizer"><a href="#1-MySQL-Query-Optimizer" class="headerlink" title="1. MySQL Query Optimizer"></a>1. <code>MySQL</code> Query Optimizer</h3><p>​      MySQL Optimizer是一个专门负责优化SELECT 语句的优化器模块，它主要的功能就是通过计算分析系统中收集的各种统计信息，为客户端请求的Query 给出他认为最优的执行计划，也就是他认为最优的数据检索方式。</p>
-<p>​      当客户端向MySQL 请求一条Query，命令解析器模块完成请求分类，区别出是 SELECT 并转发给MySQL Query Optimizer时，MySQL Query Optimizer 首先会对整条Query进行优化，处理掉一些常量表达式的预算，直接换算成常量值。并对 Query 中的查询条件进行简化和转换，如去掉一些无用或显而易见的条件、结构调整等。然后分析 Query 中的 Hint 信息（如果有），看显示Hint信息是否可以完全确定该Query 的执行计划。如果没有 Hint 或Hint 信息还不足以完全确定执行计划，则会读取所涉及对象的统计信息，根据 Query 进行写相应的计算分析，然后再得出最后的执行计划。Query Optimizer 是一个数据库软件非常核心的功能，虽然说起来只是简单的几句话，但在 MySQL 内部，MySQL Query Optimizer 实际上经过了很多复杂的运算分析，才得出最后的执行计划。</p>
-        
-          <a class="article-more-a" href="/2020/03/03/mysql-senior-06-explain/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/03/mysql-senior-06-explain/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql-senior-05-btree-index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/02/mysql-senior-05-btree-index/">Mysql 8 高级-05 BTree索引</a>
-    </h1>
-  
-
-        
-        
-<a href="/2020/03/02/mysql-senior-05-btree-index/" class="archive-article-date">
-  	<time datetime="2020-03-02T03:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-BTree介绍"><a href="#1-BTree介绍" class="headerlink" title="1. BTree介绍"></a>1. BTree介绍</h3><p>Btree索引(或Balanced Tree)，是一种很普遍的数据库索引结构。其特点是定位高效、利用率高、自我平衡，特别适用于高基数字段，定位单条或小范围数据非常高效。理论上，使用Btree在亿条数据与100条数据中定位记录的花销相同。</p>
-<p>特点：数据结构利用率高，定位高效。</p>
-<p>​            永远保持平衡。</p>
-<h3 id="2-BTree索引数据结构"><a href="#2-BTree索引数据结构" class="headerlink" title="2.BTree索引数据结构"></a>2.BTree索引数据结构</h3><p>Btree索引的数据结构如下：</p>
-<p><img src="/image/mysql/image-20200301190441311.png" alt></p>
-        
-          <a class="article-more-a" href="/2020/03/02/mysql-senior-05-btree-index/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/02/mysql-senior-05-btree-index/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql-senior-04-index-introduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/01/mysql-senior-04-index-introduction/">Mysql 8 高级-04 索引简介</a>
-    </h1>
-  
-
-        
-        
-<a href="/2020/03/01/mysql-senior-04-index-introduction/" class="archive-article-date">
-  	<time datetime="2020-03-01T03:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-索引介绍"><a href="#1-索引介绍" class="headerlink" title="1.索引介绍"></a>1.索引介绍</h3><ol>
-<li>MySQL官方对索引的定义为：索引(Index)是帮助MySQL高校获取数据的数据结构。<br>可以得到索引的本质：索引是数据结构</li>
-<li>你可以简单理解为”排好序的快速查找数据结构”。数据本身之外,数据库还维护着一个满足特定查找算法的数据结构，这些数据结构以某种方式指向数据，这样就可以在这些数据结构的基础上实现高级查找算法,这种数据结构就是索引。</li>
-<li>一般来说索引本身也很大，不可能全部存储在内存中，因此索引往往以文件形式存储在硬盘上</li>
-<li>我们平时所说的索引，如果没有特别指明，都是指B树(多路搜索树，并不一定是二叉树)结构组织的索引。其中聚集索引，次要索引，覆盖索引，复合索引，前缀索引，唯一索引默认都是使用B+树索引，统称索引。当然,除了B+树这种类型的索引之外，还有哈希索引(hash index)等。</li>
-</ol>
-        
-          <a class="article-more-a" href="/2020/03/01/mysql-senior-04-index-introduction/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/01/mysql-senior-04-index-introduction/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql-senior-03-seven-join-queries" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/29/mysql-senior-03-seven-join-queries/">Mysql 8 高级-03 七种join查询</a>
-    </h1>
-  
-
-        
-        
-<a href="/2020/02/29/mysql-senior-03-seven-join-queries/" class="archive-article-date">
-  	<time datetime="2020-02-29T03:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-Join介绍"><a href="#1-Join介绍" class="headerlink" title="1.Join介绍"></a>1.<code>Join</code>介绍</h3><p>  Join 是在多表关联查询的一个关键字，Join 按照功能大致分为如下三类：</p>
-<ul>
-<li><strong>INNER JOIN（内连接,或等值连接）</strong>：获取两个表中字段匹配关系的记录。</li>
-<li><strong>LEFT JOIN（左连接）：</strong>获取左表所有记录，即使右表没有对应匹配的记录。</li>
-<li><strong>RIGHT JOIN（右连接）：</strong> 与 LEFT JOIN 相反，用于获取右表所有记录，即使左表没有对应匹配的记录。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2020/02/29/mysql-senior-03-seven-join-queries/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/29/mysql-senior-03-seven-join-queries/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -1101,6 +1313,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
@@ -1113,15 +1329,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
             
             <div class="clearfix"></div>

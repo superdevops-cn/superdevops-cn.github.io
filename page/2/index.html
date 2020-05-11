@@ -154,6 +154,588 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-mysql-senior-09-query-optimalize" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/12/mysql-senior-09-query-optimalize/">Mysql 8 高级-09 查询优化</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/12/mysql-senior-09-query-optimalize/" class="archive-article-date">
+  	<time datetime="2020-03-12T12:38:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-准备数据"><a href="#1-准备数据" class="headerlink" title="1.准备数据"></a>1.准备数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span>   <span class="keyword">if</span> <span class="keyword">exists</span> <span class="keyword">query</span>;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">query</span></span><br><span class="line">(</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">int</span> auto_increment primary <span class="keyword">key</span>,</span><br><span class="line">    t0 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t1 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t2 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t3 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t4 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t5 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t6 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t7 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t8 <span class="built_in">varchar</span>(<span class="number">100</span>),</span><br><span class="line">    t9 <span class="built_in">varchar</span>(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">)<span class="keyword">engine</span> =<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span> =utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'a0'</span>,<span class="string">'a1'</span>,<span class="string">'a2'</span>,<span class="string">'a3'</span>,<span class="string">'a4'</span>,<span class="string">'a5'</span>,<span class="string">'a6'</span>,<span class="string">'a7'</span>,<span class="string">'a8'</span>,<span class="string">'a9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'b0'</span>,<span class="string">'b1'</span>,<span class="string">'b2'</span>,<span class="string">'b3'</span>,<span class="string">'b4'</span>,<span class="string">'b5'</span>,<span class="string">'b6'</span>,<span class="string">'b7'</span>,<span class="string">'b8'</span>,<span class="string">'b9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'c0'</span>,<span class="string">'c1'</span>,<span class="string">'c2'</span>,<span class="string">'c3'</span>,<span class="string">'c4'</span>,<span class="string">'c5'</span>,<span class="string">'c6'</span>,<span class="string">'c7'</span>,<span class="string">'c8'</span>,<span class="string">'c9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'d0'</span>,<span class="string">'d1'</span>,<span class="string">'d2'</span>,<span class="string">'d3'</span>,<span class="string">'d4'</span>,<span class="string">'d5'</span>,<span class="string">'d6'</span>,<span class="string">'d7'</span>,<span class="string">'d8'</span>,<span class="string">'d9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'e0'</span>,<span class="string">'e1'</span>,<span class="string">'e2'</span>,<span class="string">'e3'</span>,<span class="string">'e4'</span>,<span class="string">'e5'</span>,<span class="string">'e6'</span>,<span class="string">'e7'</span>,<span class="string">'e8'</span>,<span class="string">'e9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'f0'</span>,<span class="string">'f1'</span>,<span class="string">'f2'</span>,<span class="string">'f3'</span>,<span class="string">'f4'</span>,<span class="string">'f5'</span>,<span class="string">'f6'</span>,<span class="string">'f7'</span>,<span class="string">'f8'</span>,<span class="string">'f9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'g0'</span>,<span class="string">'g1'</span>,<span class="string">'g2'</span>,<span class="string">'g3'</span>,<span class="string">'g4'</span>,<span class="string">'g5'</span>,<span class="string">'g6'</span>,<span class="string">'g7'</span>,<span class="string">'g8'</span>,<span class="string">'g9'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">query</span> <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'h0'</span>,<span class="string">'h1'</span>,<span class="string">'h2'</span>,<span class="string">'h3'</span>,<span class="string">'h4'</span>,<span class="string">'h5'</span>,<span class="string">'h6'</span>,<span class="string">'h7'</span>,<span class="string">'h8'</span>,<span class="string">'h9'</span>);</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2020/03/12/mysql-senior-09-query-optimalize/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/12/mysql-senior-09-query-optimalize/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-08-index-optimalize" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/10/mysql-senior-08-index-optimalize/">Mysql 8 高级-08 索引优化</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/10/mysql-senior-08-index-optimalize/" class="archive-article-date">
+  	<time datetime="2020-03-10T12:14:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-数据准备"><a href="#1-数据准备" class="headerlink" title="1.数据准备"></a>1.数据准备</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span>  <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> person;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> person</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">id</span>    <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">    <span class="keyword">name</span>  <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    age   <span class="built_in">int</span>          <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    email <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    phone <span class="keyword">long</span>         <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    card  <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    memo  <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">default</span> <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span></span><br><span class="line">  <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span> = utf8mb4;</span><br><span class="line"><span class="comment">###插入数据</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'刘一'</span>,<span class="number">15</span>,<span class="string">'13888131111@qq.com'</span>,<span class="number">13888131111</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'陈二'</span>,<span class="number">25</span>,<span class="string">'13888132222@qq.com'</span>,<span class="number">13888132222</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'张三'</span>,<span class="number">35</span>,<span class="string">'13888133333@qq.com'</span>,<span class="number">13888133333</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'李四'</span>,<span class="number">45</span>,<span class="string">'13888134444@qq.com'</span>,<span class="number">13888134444</span>,<span class="keyword">uuid_short</span>(),<span class="string">'1111'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'王五'</span>,<span class="number">55</span>,<span class="string">'13888135555@qq.com'</span>,<span class="number">13888135555</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'赵六'</span>,<span class="number">65</span>,<span class="string">'13888136666@qq.com'</span>,<span class="number">13888136666</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'孙七'</span>,<span class="number">75</span>,<span class="string">'13888137777@qq.com'</span>,<span class="number">13888137777</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'周八'</span>,<span class="number">85</span>,<span class="string">'13888138888@qq.com'</span>,<span class="number">13888138888</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'吴九'</span>,<span class="number">95</span>,<span class="string">'13888139999@qq.com'</span>,<span class="number">13888139999</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> person <span class="keyword">values</span> (<span class="literal">null</span>,<span class="string">'郑十'</span>,<span class="number">99</span>,<span class="string">'13888130000@qq.com'</span>,<span class="number">13888130000</span>,<span class="keyword">uuid_short</span>(),<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">###建立复合索引</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> person__idx_name_age_email</span><br><span class="line">    <span class="keyword">on</span> person (<span class="keyword">name</span>, age, email);</span><br><span class="line"><span class="comment">###建立唯一索引</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">unique</span> <span class="keyword">index</span> person__uindex_phone</span><br><span class="line">    <span class="keyword">on</span> person (card);</span><br><span class="line"><span class="comment">### 普通索引</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> person_memo_index_memo</span><br><span class="line">    <span class="keyword">on</span> person (memo);</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2020/03/10/mysql-senior-08-index-optimalize/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/10/mysql-senior-08-index-optimalize/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-07-index-analysis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/05/mysql-senior-07-index-analysis/">Mysql 8 高级-07 索引分析</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/05/mysql-senior-07-index-analysis/" class="archive-article-date">
+  	<time datetime="2020-03-05T13:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-单表分析"><a href="#1-单表分析" class="headerlink" title="1.单表分析"></a>1.单表分析</h3><h4 id="1-1准备数据"><a href="#1-1准备数据" class="headerlink" title="1.1准备数据"></a>1.1准备数据</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> article(</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">  author_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  category_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  views <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  comments <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  title <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  <span class="keyword">content</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> article <span class="keyword">values</span>(<span class="literal">null</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="string">'1'</span>,<span class="string">'1'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> article <span class="keyword">values</span>(<span class="literal">null</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="string">'2'</span>,<span class="string">'2'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> article <span class="keyword">values</span>(<span class="literal">null</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="string">'3'</span>,<span class="string">'3'</span>);</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2020/03/05/mysql-senior-07-index-analysis/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/05/mysql-senior-07-index-analysis/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-06-explain" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/03/mysql-senior-06-explain/">Mysql 8 高级-06 性能优化</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/03/mysql-senior-06-explain/" class="archive-article-date">
+  	<time datetime="2020-03-03T12:14:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-MySQL-Query-Optimizer"><a href="#1-MySQL-Query-Optimizer" class="headerlink" title="1. MySQL Query Optimizer"></a>1. <code>MySQL</code> Query Optimizer</h3><p>​      MySQL Optimizer是一个专门负责优化SELECT 语句的优化器模块，它主要的功能就是通过计算分析系统中收集的各种统计信息，为客户端请求的Query 给出他认为最优的执行计划，也就是他认为最优的数据检索方式。</p>
+<p>​      当客户端向MySQL 请求一条Query，命令解析器模块完成请求分类，区别出是 SELECT 并转发给MySQL Query Optimizer时，MySQL Query Optimizer 首先会对整条Query进行优化，处理掉一些常量表达式的预算，直接换算成常量值。并对 Query 中的查询条件进行简化和转换，如去掉一些无用或显而易见的条件、结构调整等。然后分析 Query 中的 Hint 信息（如果有），看显示Hint信息是否可以完全确定该Query 的执行计划。如果没有 Hint 或Hint 信息还不足以完全确定执行计划，则会读取所涉及对象的统计信息，根据 Query 进行写相应的计算分析，然后再得出最后的执行计划。Query Optimizer 是一个数据库软件非常核心的功能，虽然说起来只是简单的几句话，但在 MySQL 内部，MySQL Query Optimizer 实际上经过了很多复杂的运算分析，才得出最后的执行计划。</p>
+        
+          <a class="article-more-a" href="/2020/03/03/mysql-senior-06-explain/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/03/mysql-senior-06-explain/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-05-btree-index" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/02/mysql-senior-05-btree-index/">Mysql 8 高级-05 BTree索引</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/02/mysql-senior-05-btree-index/" class="archive-article-date">
+  	<time datetime="2020-03-02T03:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-BTree介绍"><a href="#1-BTree介绍" class="headerlink" title="1. BTree介绍"></a>1. BTree介绍</h3><p>Btree索引(或Balanced Tree)，是一种很普遍的数据库索引结构。其特点是定位高效、利用率高、自我平衡，特别适用于高基数字段，定位单条或小范围数据非常高效。理论上，使用Btree在亿条数据与100条数据中定位记录的花销相同。</p>
+<p>特点：数据结构利用率高，定位高效。</p>
+<p>​            永远保持平衡。</p>
+<h3 id="2-BTree索引数据结构"><a href="#2-BTree索引数据结构" class="headerlink" title="2.BTree索引数据结构"></a>2.BTree索引数据结构</h3><p>Btree索引的数据结构如下：</p>
+<p><img src="/image/mysql/05/050001.png" alt></p>
+        
+          <a class="article-more-a" href="/2020/03/02/mysql-senior-05-btree-index/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/02/mysql-senior-05-btree-index/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-04-index-introduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/01/mysql-senior-04-index-introduction/">Mysql 8 高级-04 索引简介</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/03/01/mysql-senior-04-index-introduction/" class="archive-article-date">
+  	<time datetime="2020-03-01T03:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-索引介绍"><a href="#1-索引介绍" class="headerlink" title="1.索引介绍"></a>1.索引介绍</h3><ol>
+<li>MySQL官方对索引的定义为：索引(Index)是帮助MySQL高校获取数据的数据结构。<br>可以得到索引的本质：索引是数据结构</li>
+<li>你可以简单理解为”排好序的快速查找数据结构”。数据本身之外,数据库还维护着一个满足特定查找算法的数据结构，这些数据结构以某种方式指向数据，这样就可以在这些数据结构的基础上实现高级查找算法,这种数据结构就是索引。</li>
+<li>一般来说索引本身也很大，不可能全部存储在内存中，因此索引往往以文件形式存储在硬盘上</li>
+<li>我们平时所说的索引，如果没有特别指明，都是指B树(多路搜索树，并不一定是二叉树)结构组织的索引。其中聚集索引，次要索引，覆盖索引，复合索引，前缀索引，唯一索引默认都是使用B+树索引，统称索引。当然,除了B+树这种类型的索引之外，还有哈希索引(hash index)等。</li>
+</ol>
+        
+          <a class="article-more-a" href="/2020/03/01/mysql-senior-04-index-introduction/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/01/mysql-senior-04-index-introduction/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql-senior-03-seven-join-queries" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/29/mysql-senior-03-seven-join-queries/">Mysql 8 高级-03 七种join查询</a>
+    </h1>
+  
+
+        
+        
+<a href="/2020/02/29/mysql-senior-03-seven-join-queries/" class="archive-article-date">
+  	<time datetime="2020-02-29T03:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-Join介绍"><a href="#1-Join介绍" class="headerlink" title="1.Join介绍"></a>1.<code>Join</code>介绍</h3><p>  Join 是在多表关联查询的一个关键字，Join 按照功能大致分为如下三类：</p>
+<ul>
+<li><strong>INNER JOIN（内连接,或等值连接）</strong>：获取两个表中字段匹配关系的记录。</li>
+<li><strong>LEFT JOIN（左连接）：</strong>获取左表所有记录，即使右表没有对应匹配的记录。</li>
+<li><strong>RIGHT JOIN（右连接）：</strong> 与 LEFT JOIN 相反，用于获取右表所有记录，即使左表没有对应匹配的记录。</li>
+</ul>
+        
+          <a class="article-more-a" href="/2020/02/29/mysql-senior-03-seven-join-queries/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CentOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/29/mysql-senior-03-seven-join-queries/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-mysql-senior-02-execution-order-of-sql-statements" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -257,7 +839,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="1-Mysql逻辑架构介绍"><a href="#1-Mysql逻辑架构介绍" class="headerlink" title="1.Mysql逻辑架构介绍"></a>1.<code>Mysql</code>逻辑架构介绍</h3><p>​     和其他数据库相比，mysql有点与众不同，它的架构可以在多种不同的场景中应用并发挥良好的作用，主要体现在储存引擎的架构上，插拔式的储存引擎将处理和其他的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需要和实际需要选择合适的存储引擎。</p>
-<p><img src="/image/mysql/image-20200229101759889.png" alt></p>
+<p><img src="/image/mysql/mysql01/010001.png" alt></p>
 <p>从上图可知，MySQL的逻辑框架主要分为四层：</p>
         
           <a class="article-more-a" href="/2020/02/25/mysql-senior-01-architecture-introduction/#more">more >></a>
@@ -402,510 +984,9 @@
 
 
   
-    <article id="post-spring-cloud-base-06-zuul" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/27/spring-cloud-base-06-zuul/">Spring Cloud-06 使用Zuul构建微服务网关</a>
-    </h1>
-  
-
-        
-        
-<a href="/2019/11/27/spring-cloud-base-06-zuul/" class="archive-article-date">
-  	<time datetime="2019-11-27T03:24:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="string">JDK：Spring</span> <span class="string">Cloud官方建议使用JDK</span> <span class="number">1.8</span><span class="string">;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Boot：笔者使用Spring</span> <span class="string">Boot</span> <span class="number">2.1</span><span class="number">.10</span><span class="string">.RELEASE;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Cloud：笔者使用Spring</span> <span class="string">Cloud</span>  <span class="string">Greenwich.SR3</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Maven：笔者使用Maven</span> <span class="number">3.6</span><span class="number">.1</span><span class="string">构建项目；</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="1-为什么要使用微服务网关"><a href="#1-为什么要使用微服务网关" class="headerlink" title="1. 为什么要使用微服务网关"></a>1. 为什么要使用微服务网关</h3><p>​       经过前文的讲解，微服务架构已经初具雏形，但还有一些问题——不同的微服务一般会有不同的网络地址，而外部客户端（例如手机<code>APP</code>）可能需要调用多个服务的接口才能完成一个业务需求。例如一个电影购票的手机<code>APP</code>，可能调用多个微服务的接口才能完成一次购票的业务流程，</p>
-<p>如下图所示</p>
-        
-          <a class="article-more-a" href="/2019/11/27/spring-cloud-base-06-zuul/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Zuul</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/27/spring-cloud-base-06-zuul/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-spring-cloud-base-05-hystrix" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/24/spring-cloud-base-05-hystrix/">Spring Cloud-05 Hystrix实现微服务的容错处理</a>
-    </h1>
-  
-
-        
-        
-<a href="/2019/11/24/spring-cloud-base-05-hystrix/" class="archive-article-date">
-  	<time datetime="2019-11-24T01:20:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0. 说在前面"></a>0. 说在前面</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="string">JDK：Spring</span> <span class="string">Cloud官方建议使用JDK</span> <span class="number">1.8</span><span class="string">;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Boot：笔者使用Spring</span> <span class="string">Boot</span> <span class="number">2.1</span><span class="number">.10</span><span class="string">.RELEASE;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Cloud：笔者使用Spring</span> <span class="string">Cloud</span>  <span class="string">Greenwich.SR3</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Maven：笔者使用Maven</span> <span class="number">3.6</span><span class="number">.1</span><span class="string">构建项目；</span></span><br></pre></td></tr></table></figure>
-
-<p>​     </p>
-<p>​        前面的文章已经使用<code>Eureka</code>实现了微服务的注册与发现，<code>Ribbon</code>实现了客户端侧的负载均衡，<code>Feign</code>实现了声明式的<code>API</code>调用。</p>
-<p>​       下面我们就来讲解如何使用<code>Hystrix</code>实现微服务的容错。</p>
-<h3 id="1-实现容错的手段"><a href="#1-实现容错的手段" class="headerlink" title="1. 实现容错的手段"></a>1. 实现容错的手段</h3><p>​        如果服务提供者响应非常缓慢，那么消费者对提供者的请求就会被强制等待，直到提供者响应或超时。在高负载场景下，如果不做任何处理，此类问题可能会导致服务消费者的资源耗竭甚至整个系统的崩溃。例如，曾经发生过一个案例——某电子商务网站在一个黑色星期五发生过载。过多的并发请求，导致用户支付的请求延迟很久都没有响应，在等待很长时间后最终失败。支付失败又导致用户重新刷新页面并再次尝试支付，进一步增加了服务器的负载，最终整个系统都崩溃了。</p>
-        
-          <a class="article-more-a" href="/2019/11/24/spring-cloud-base-05-hystrix/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Hystrix</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/24/spring-cloud-base-05-hystrix/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-spring-cloud-base-04-feign" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/21/spring-cloud-base-04-feign/">Spring Cloud-04 Feign实现声明式REST调用</a>
-    </h1>
-  
-
-        
-        
-<a href="/2019/11/21/spring-cloud-base-04-feign/" class="archive-article-date">
-  	<time datetime="2019-11-21T02:28:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0. 说在前面"></a>0. 说在前面</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="string">JDK：Spring</span> <span class="string">Cloud官方建议使用JDK</span> <span class="number">1.8</span><span class="string">;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Boot：笔者使用Spring</span> <span class="string">Boot</span> <span class="number">2.1</span><span class="number">.10</span><span class="string">.RELEASE;</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Spring</span> <span class="string">Cloud：笔者使用Spring</span> <span class="string">Cloud</span>  <span class="string">Greenwich.SR3</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Maven：笔者使用Maven</span> <span class="number">3.6</span><span class="number">.1</span><span class="string">构建项目；</span></span><br></pre></td></tr></table></figure>
-
-<p>前文的示例中是使用<code>RestTemplate</code>实现<code>REST API</code>调用的，代码大致如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MovieController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/user/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findById</span><span class="params">(@PathVariable(<span class="string">"id"</span>)</span> Long id) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> restTemplate.getForObject(<span class="string">"http://microservice-provider-user-ribbon/user/"</span> + id, User.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/11/21/spring-cloud-base-04-feign/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Feign</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/21/spring-cloud-base-04-feign/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-spring-cloud-base-03-Ribbon" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/19/spring-cloud-base-03-Ribbon/">Spring Cloud-03 Ribbon实现客户端侧负载均衡</a>
-    </h1>
-  
-
-        
-        
-<a href="/2019/11/19/spring-cloud-base-03-Ribbon/" class="archive-article-date">
-  	<time datetime="2019-11-19T02:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- JDK：Spring Cloud官方建议使用JDK <span class="number">1.8</span>;</span><br><span class="line">- Spring Boot：笔者使用Spring Boot <span class="number">2.1</span>.10.RELEASE;</span><br><span class="line">- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3</span><br><span class="line">- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span><br><span class="line">- Maven：笔者使用Maven <span class="number">3.6</span>.1构建项目；</span><br></pre></td></tr></table></figure>
-
-<p>​       经过前面的讲解，已经实现了微服务的注册与发现。启动各个微服务时，Eureka Client会把自己的网络信息注册到Eureka Server上。世界似乎更美好了一些。</p>
-<p>​       然而，这样的架构依然有一些问题，比如负载均衡。一般来说，在生产环境中，各个微服务都会部署多个实例。那么服务消费者要如何将请求分摊到多个服务提供者实例上呢？</p>
-        
-          <a class="article-more-a" href="/2019/11/19/spring-cloud-base-03-Ribbon/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Ribbon</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/19/spring-cloud-base-03-Ribbon/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-spring-cloud-base-02-eureka" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/17/spring-cloud-base-02-eureka/">Spring Cloud-02 微服务注册与发现Eureka</a>
-    </h1>
-  
-
-        
-        
-<a href="/2019/11/17/spring-cloud-base-02-eureka/" class="archive-article-date">
-  	<time datetime="2019-11-17T03:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- JDK：Spring Cloud官方建议使用JDK <span class="number">1.8</span>;</span><br><span class="line">- Spring Boot：笔者使用Spring Boot <span class="number">2.1</span>.10.RELEASE;</span><br><span class="line">- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3</span><br><span class="line">- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span><br><span class="line">- Maven：笔者使用Maven <span class="number">3.6</span>.1构建项目；</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-服务发现简介"><a href="#1-服务发现简介" class="headerlink" title="1.服务发现简介"></a>1.服务发现简介</h3><p>​         通过上一篇博客的讲解，我们知道硬编码提供者地址的方式有不少问题。要想解决这些问题，服务消费者需要一个强大的服务发现机制，服务消费者使用这种机制获取服务提供者的网络信息。不仅如此，即使服务提供者的信息发生变化，服务消费者也无须修改配置文件。 </p>
-<p>​        服务发现组件提供这种能力。在微服务架构中，服务发现组件是一个非常关键的组件。</p>
-        
-          <a class="article-more-a" href="/2019/11/17/spring-cloud-base-02-eureka/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Eureka</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/17/spring-cloud-base-02-eureka/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-spring-cloud-base-01-start" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/13/spring-cloud-base-01-start/">Spring Cloud-01 开始使用微服务</a>
-    </h1>
-  
-
-        
-        
-<a href="/2019/11/13/spring-cloud-base-01-start/" class="archive-article-date">
-  	<time datetime="2019-11-13T02:29:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- JDK：Spring Cloud官方建议使用JDK <span class="number">1.8</span>。</span><br><span class="line">- Spring Boot：笔者使用Spring Boot <span class="number">2.1</span>.10.RELEASE</span><br><span class="line">- Spring Cloud：笔者使用Spring Cloud  Greenwich.SR3;</span><br><span class="line">- IDE的选择：选择一款强大的IDE往往能够事半功倍，笔者使用IntelliJIDEA；</span><br><span class="line">- Maven：笔者使用Maven <span class="number">3.6</span>.1构建项目；</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-Spring-Cloud使用的前提"><a href="#1-Spring-Cloud使用的前提" class="headerlink" title="1.Spring Cloud使用的前提"></a>1.Spring Cloud使用的前提</h3><p>​     Spring Cloud 不一定适合所有人，想要玩转Spring Cloud 需要具备什么的技术能力，以及在实战中会使用哪些工具。</p>
-        
-          <a class="article-more-a" href="/2019/11/13/spring-cloud-base-01-start/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring Cloud</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/13/spring-cloud-base-01-start/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 
@@ -1020,6 +1101,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
@@ -1032,15 +1117,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
             
             <div class="clearfix"></div>

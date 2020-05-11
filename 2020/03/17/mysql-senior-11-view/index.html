@@ -16,24 +16,24 @@
 <meta property="og:site_name" content="Java橙序猿">
 <meta property="og:description" content="1.  视图概述​      视图是从一个或者多个表中导出的，视图的行为与表非常相似，但视图是一个虚拟表。在视图中用户可以使用SELECT语句查询数据，以及使用INSERT、UPDATE和DELETE修改记录。从MySQL 5.0开始可以使用视图，视图可以使用户操作方便，而且可以保障数据库系统的安全。 1.1 视图的含义​     视图是一个虚拟表，是从数据库中一个或多个表中导出来的表。视图还可以">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322195425370.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322195848549.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322200055034.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322200308713.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322200508791.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322200945761.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322201502930.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322201700808.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322202406530.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322202839944.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322203301386.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200322203800358.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110001.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110002.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110003.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110004.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110005.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110006.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110007.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110008.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110009.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110010.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110011.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/11/110012.png">
 <meta property="og:image" content="http://yoursite.com/image/common/superdevops.jpg">
-<meta property="og:updated_time" content="2020-03-22T14:01:48.634Z">
+<meta property="og:updated_time" content="2020-05-11T15:54:59.786Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql 8 高级-11 视图">
 <meta name="twitter:description" content="1.  视图概述​      视图是从一个或者多个表中导出的，视图的行为与表非常相似，但视图是一个虚拟表。在视图中用户可以使用SELECT语句查询数据，以及使用INSERT、UPDATE和DELETE修改记录。从MySQL 5.0开始可以使用视图，视图可以使用户操作方便，而且可以保障数据库系统的安全。 1.1 视图的含义​     视图是一个虚拟表，是从数据库中一个或多个表中导出来的表。视图还可以">
-<meta name="twitter:image" content="http://yoursite.com/image/mysql/image-20200322195425370.png">
+<meta name="twitter:image" content="http://yoursite.com/image/mysql/11/110001.png">
   
  
 
@@ -224,41 +224,41 @@
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select  * from  emp;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322195425370.png" alt="image-20200322195425370"></p>
+<p><img src="/image/mysql/11/110001.png" alt="image-20200322195425370"></p>
 <p>创建视图(不显示工资)：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create view  emp_view</span><br><span class="line">as</span><br><span class="line">select  name,age from  emp;</span><br></pre></td></tr></table></figure>
 
 <p>查询视图:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select  * from  emp_view;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322195848549.png" alt="image-20200322195848549"></p>
+<p><img src="/image/mysql/11/110002.png" alt="image-20200322195848549"></p>
 <h3 id="3-查看视图"><a href="#3-查看视图" class="headerlink" title="3. 查看视图"></a>3. 查看视图</h3><p>​     查看视图是查看数据库中已存在的视图的定义。查看视图必须要有SHOWVIEW的权限，MySQL数据库下的user表中保存着这个信息。查看视图的方法包括DESCRIBE、SHOW TABLE STATUS和SHOW CREATE VIEW，本节将介绍查看视图的各种方法。</p>
 <h4 id="3-1-使用DESCRIBE语句查看视图基本信息"><a href="#3-1-使用DESCRIBE语句查看视图基本信息" class="headerlink" title="3.1 使用DESCRIBE语句查看视图基本信息"></a>3.1 使用DESCRIBE语句查看视图基本信息</h4><p>DESCRIBE可以用来查看视图，具体的语法如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DESCRIBE 视图名；</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DESCRIBE emp_view;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322200055034.png" alt="image-20200322200055034"></p>
+<p><img src="/image/mysql/11/110003.png" alt="image-20200322200055034"></p>
 <p>​    结果显示出了视图的字段定义、字段的数据类型、是否为空、是否为主/外键、默认值和额外信息。DESCRIBE一般情况下都简写成DESC，输入这个命令的执行结果和输入DESCRIBE的执行结果是一样的。</p>
 <h4 id="3-2-使用SHOW-TABLE-STATUS语句查看视图基本信息"><a href="#3-2-使用SHOW-TABLE-STATUS语句查看视图基本信息" class="headerlink" title="3.2 使用SHOW TABLE STATUS语句查看视图基本信息"></a>3.2 使用SHOW TABLE STATUS语句查看视图基本信息</h4><p>查看视图的信息可以通过SHOW TABLE STATUS的方法完成，具体的语法如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show table status like &apos;视图名&apos;;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show table status like &apos;emp_view&apos;\G</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322200308713.png" alt="image-20200322200308713"></p>
+<p><img src="/image/mysql/11/110004.png" alt="image-20200322200308713"></p>
 <h4 id="3-3-使用SHOW-CREATE-VIEW语句查看视图详细信息"><a href="#3-3-使用SHOW-CREATE-VIEW语句查看视图详细信息" class="headerlink" title="3.3  使用SHOW CREATE VIEW语句查看视图详细信息"></a>3.3  使用SHOW CREATE VIEW语句查看视图详细信息</h4><p>使用SHOW CREATE VIEW语句可以查看视图详细定义，语法如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show create view 视图名;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show create view emp_view;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322200508791.png" alt="image-20200322200508791"></p>
+<p><img src="/image/mysql/11/110005.png" alt="image-20200322200508791"></p>
 <p>执行结果显示视图的名称、创建视图的语句等信息。</p>
 <h4 id="3-4-在views表中查看视图详细信息"><a href="#3-4-在views表中查看视图详细信息" class="headerlink" title="3.4 在views表中查看视图详细信息"></a>3.4 在views表中查看视图详细信息</h4><p>​    在MySQL中，information_schema数据库下的views表中存储了所有视图的定义。通过对views表的查询，可以查看数据库中所有视图的详细信息，查询语句如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from   information_schema.views  where  table_name =&apos;视图名&apos;;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from   information_schema.views  where  table_name =&apos;emp_view&apos;\G</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322200945761.png" alt="image-20200322200945761"></p>
+<p><img src="/image/mysql/11/110006.png" alt="image-20200322200945761"></p>
 <h3 id="4-修改视图"><a href="#4-修改视图" class="headerlink" title="4.  修改视图"></a>4.  修改视图</h3><p>​     修改视图是指修改数据库中存在的视图，当基本表的某些字段发生变化的时候，可以通过修改视图来保持与基本表的一致性。MySQL中通过CREATE OR REPLACE VIEW语句和ALTER语句来修改视图。</p>
 <h4 id="4-1-使用CREATE-OR-REPLACE-VIEW语句修改视图"><a href="#4-1-使用CREATE-OR-REPLACE-VIEW语句修改视图" class="headerlink" title="4.1  使用CREATE OR REPLACE VIEW语句修改视图"></a>4.1  使用CREATE OR REPLACE VIEW语句修改视图</h4><p>在MySQL中修改视图，可使用CREATE OR REPLACE VIEW语句，语法如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE [OR REPLACE] [ALGORITHM = &#123;UNDEFINED | MERGE | TEMPTABLE&#125;]</span><br><span class="line"></span><br><span class="line">VIEW view_name [(column_list)]</span><br><span class="line"></span><br><span class="line">AS select_statement</span><br><span class="line"></span><br><span class="line">[WITH [CASCADED | LOCAL] CHECK OPTION]</span><br></pre></td></tr></table></figure>
@@ -266,26 +266,26 @@
 <p>​    可以看到，修改视图的语句和创建视图的语句是完全一样的。当视图已经存在时，修改语句对视图进行修改；当视图不存在时，创建视图。下面通过一个实例来说明。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 修改前</span><br><span class="line">desc emp_view;</span><br><span class="line">-- 修改视图</span><br><span class="line">create or replace view  emp_view</span><br><span class="line">as</span><br><span class="line">select  name from  emp;</span><br><span class="line">-- 修改后</span><br><span class="line">desc emp_view;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322201502930.png" alt="image-20200322201502930"></p>
+<p><img src="/image/mysql/11/110007.png" alt="image-20200322201502930"></p>
 <h4 id="4-2-使用ALTER语句修改视图"><a href="#4-2-使用ALTER语句修改视图" class="headerlink" title="4.2  使用ALTER语句修改视图"></a>4.2  使用ALTER语句修改视图</h4><p>ALTER语句是MySQL提供的另外一种修改视图的方法，语法如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ALTER [ALGORITHM = &#123;UNDEFINED | MERGE | TEMPTABLE&#125;]</span><br><span class="line"></span><br><span class="line">VIEW view_name [(column_list)]</span><br><span class="line"></span><br><span class="line">AS select_statement</span><br><span class="line"></span><br><span class="line">[WITH [CASCADED | LOCAL] CHECK OPTION]</span><br></pre></td></tr></table></figure>
 
 <p>这个语法中的关键字和前面视图的关键字是一样的，这里就不再介绍了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 修改前</span><br><span class="line">desc emp_view;</span><br><span class="line">-- 修改视图</span><br><span class="line">create or replace view  emp_view</span><br><span class="line">as</span><br><span class="line">select  name,salary from  emp;</span><br><span class="line">-- 修改后</span><br><span class="line">desc emp_view;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322201700808.png" alt="image-20200322201700808"></p>
+<p><img src="/image/mysql/11/110008.png" alt="image-20200322201700808"></p>
 <h3 id="5-更新视图"><a href="#5-更新视图" class="headerlink" title="5. 更新视图"></a>5. 更新视图</h3><p>​         更新视图是指通过视图来插入、更新、删除表中的数据，因为视图是一个虚拟表，其中没有数据。通过视图更新的时候都是转到基本表上进行更新的，如果对视图增加或者删除记录，实际上是对其基本表增加或者删除记录。下面将介绍视图更新的3种方法：INSERT、UPDATE和DELETE。</p>
 <h4 id="5-1-UPDATE"><a href="#5-1-UPDATE" class="headerlink" title="5.1 UPDATE"></a>5.1 UPDATE</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-- 更新前的表数据</span><br><span class="line">select * from emp;</span><br><span class="line">-- 更新前的视图数据</span><br><span class="line">select * from emp_view;</span><br><span class="line">-- 更新所有人的工资</span><br><span class="line">update emp_view set salary =3000;</span><br><span class="line">-- 更新后的表数据</span><br><span class="line">select * from emp;</span><br><span class="line">-- 更新后的视图数据</span><br><span class="line">select * from emp_view;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322202406530.png" alt="image-20200322202406530"></p>
+<p><img src="/image/mysql/11/110009.png" alt="image-20200322202406530"></p>
 <p>对视图更新后，基本表的内容也更新了，同样当对基本表更新后，另外一个视图中的内容也会更新。</p>
 <h4 id="5-2-INSERT"><a href="#5-2-INSERT" class="headerlink" title="5.2 INSERT"></a>5.2 INSERT</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-- 插入前的表数据</span><br><span class="line">select * from emp;</span><br><span class="line">-- 插入前的视图数据</span><br><span class="line">select * from emp_view;</span><br><span class="line">-- 插入一条数据</span><br><span class="line">insert into emp(id,name,age,salary) values(null,&apos;光明左使&apos;,30,6000);</span><br><span class="line">-- 插入后的表数据</span><br><span class="line">select * from emp;</span><br><span class="line">-- 插入后的视图数据</span><br><span class="line">select * from emp_view;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322202839944.png" alt="image-20200322202839944"></p>
+<p><img src="/image/mysql/11/110010.png" alt="image-20200322202839944"></p>
 <p>向表中插入一条记录，通过SELECT查看表和视图，可以看到其中的内容也跟着更新.</p>
 <h4 id="5-3-DELETE"><a href="#5-3-DELETE" class="headerlink" title="5.3 DELETE"></a>5.3 DELETE</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-- 删除前的表数据</span><br><span class="line">select * from emp;</span><br><span class="line">-- 删除前的视图数据</span><br><span class="line">select * from emp_view;</span><br><span class="line">-- 删除一条数据</span><br><span class="line">delete from  emp_view  where name =&apos;光明左使&apos;;</span><br><span class="line">-- 删除后的表数据</span><br><span class="line">select * from emp;</span><br><span class="line">-- 删除后的视图数据</span><br><span class="line">select * from emp_view;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322203301386.png" alt="image-20200322203301386"></p>
+<p><img src="/image/mysql/11/110011.png" alt="image-20200322203301386"></p>
 <p>视图中的删除操作最终是通过删除基本表中相关的记录实现的，查看删除操作之后的表和视图，可以看到通过视图删除其所依赖的基本表中的数据。</p>
 <p>当视图中包含有如下内容时，视图的更新操作将不能被执行：</p>
 <p>（1）视图中不包含基表中被定义为非空的列。</p>
@@ -298,7 +298,7 @@
 <p>其中，view_name是要删除的视图名称，可以添加多个需要删除的视图名称，各个名称之间使用逗号分隔开。删除视图必须拥有DROP权限。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-- 删除前查看视图</span><br><span class="line">DESCRIBE emp_view;</span><br><span class="line">-- 删除视图</span><br><span class="line">drop view if exists emp_view;</span><br><span class="line">-- 删除后查看视图</span><br><span class="line">DESCRIBE emp_view;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200322203800358.png" alt="image-20200322203800358"></p>
+<p><img src="/image/mysql/11/110012.png" alt="image-20200322203800358"></p>
 <p>可以看到，emp_view视图已经不存在，删除成功。</p>
 <h3 id="666-彩蛋"><a href="#666-彩蛋" class="headerlink" title="666.彩蛋"></a>666.彩蛋</h3><p>请大家持续关注公众号：Java橙序猿</p>
 <p> <img src="/image/common/superdevops.jpg" alt> </p>
@@ -586,6 +586,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
@@ -598,15 +602,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
             
             <div class="clearfix"></div>

@@ -16,28 +16,28 @@
 <meta property="og:site_name" content="Java橙序猿">
 <meta property="og:description" content="1.单表分析1.1准备数据12345678910111213create table if not exists article(  id int primary key auto_increment,  author_id int not null,  category_id int not null,  views int not null,  comments int not null,">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308164243654.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308193754271.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308205751539.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308205924276.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308211238886.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308211546458.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308212723352.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308212746451.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308213330294.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308214710794.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308215416653.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308220023970.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308220502310.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308220256898.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308221753135.png">
-<meta property="og:image" content="http://yoursite.com/image/mysql/image-20200308221933561.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070001.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070002.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070003.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070004.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070005.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070006.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070007.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070008.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070009.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070010.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070011.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070012.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070013.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070014.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070015.png">
+<meta property="og:image" content="http://yoursite.com/image/mysql/07/070016.png">
 <meta property="og:image" content="http://yoursite.com/image/common/superdevops.jpg">
-<meta property="og:updated_time" content="2020-03-22T14:01:48.633Z">
+<meta property="og:updated_time" content="2020-05-11T15:54:59.785Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql 8 高级-07 索引分析">
 <meta name="twitter:description" content="1.单表分析1.1准备数据12345678910111213create table if not exists article(  id int primary key auto_increment,  author_id int not null,  category_id int not null,  views int not null,  comments int not null,">
-<meta name="twitter:image" content="http://yoursite.com/image/mysql/image-20200308164243654.png">
+<meta name="twitter:image" content="http://yoursite.com/image/mysql/07/070001.png">
   
  
 
@@ -203,20 +203,20 @@
 
 <h4 id="1-2-使用explain分析"><a href="#1-2-使用explain分析" class="headerlink" title="1.2 使用explain分析"></a>1.2 使用explain分析</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询category_id为1且comments 大于 1 的所有记录,显示id,author_id,views</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span>  <span class="keyword">id</span>,author_id,views  <span class="keyword">from</span>  article</span><br><span class="line"><span class="keyword">where</span> category_id = <span class="number">1</span></span><br><span class="line"><span class="keyword">and</span> comments &gt; <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308164243654.png" alt="image-20200308204926030"></p>
+<p><img src="/image/mysql/07/070001.png" alt="image-20200308204926030"></p>
 <p>分析：type=ALL，产生了全表扫描。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询category_id为1且comments 大于 1 的所有记录,显示id,author_id,views</span></span><br><span class="line"><span class="comment">-- 并且找出views查看次数最多的记录</span></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span>  <span class="keyword">id</span>,author_id,views <span class="keyword">from</span>  article</span><br><span class="line"><span class="keyword">where</span> category_id = <span class="number">1</span></span><br><span class="line"><span class="keyword">and</span> comments &gt; <span class="number">1</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> views <span class="keyword">desc</span> <span class="keyword">limit</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308193754271.png" alt="image-20200308205252700"></p>
+<p><img src="/image/mysql/07/070002.png" alt="image-20200308205252700"></p>
 <p>分析：type=ALL,产生了全表扫描, 并且出现了Using filesort,使用了外部的索引排序。</p>
 <h4 id="1-3-建立索引"><a href="#1-3-建立索引" class="headerlink" title="1.3 建立索引"></a>1.3 建立索引</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> ind_article_ccv <span class="keyword">on</span> article(category_id,comments,views);</span><br></pre></td></tr></table></figure>
 
 <h4 id="1-4-再次使用explain分析"><a href="#1-4-再次使用explain分析" class="headerlink" title="1.4 再次使用explain分析"></a>1.4 再次使用explain分析</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询category_id为1且comments 大于 1 的所有记录,显示id,author_id,views</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span>  <span class="keyword">id</span>,author_id,views  <span class="keyword">from</span>  article</span><br><span class="line"><span class="keyword">where</span> category_id = <span class="number">1</span></span><br><span class="line"><span class="keyword">and</span> comments &gt; <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308205751539.png" alt="image-20200308205751539"></p>
+<p><img src="/image/mysql/07/070003.png" alt="image-20200308205751539"></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询category_id为1且comments 大于 1 的所有记录,显示id,author_id,views</span></span><br><span class="line"><span class="comment">-- 并且找出views查看次数最多的记录</span></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span>  <span class="keyword">id</span>,author_id,views <span class="keyword">from</span>  article</span><br><span class="line"><span class="keyword">where</span> category_id = <span class="number">1</span></span><br><span class="line"><span class="keyword">and</span> comments &gt; <span class="number">1</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> views <span class="keyword">desc</span> <span class="keyword">limit</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308205924276.png" alt="image-20200308205924276"></p>
+<p><img src="/image/mysql/07/070004.png" alt="image-20200308205924276"></p>
 <p>分析：创建索引之后type=range, 但是Using filesort 依然存在.</p>
 <p>​           索引创建了,为什么在排序的时候没有生效?</p>
 <p>​            这是因为先排序category_id, 如果遇到相同的category_id,则再排序comments, 如果遇到相同的comments则再排序views,当comments字段在联合索引处于中间位置时，因为comments&gt;1条件是一个范围值,所以type=range，mysql无法再利用索引对后面的views部分进行检索,即range类型查询字段后面的索引全都无效</p>
@@ -227,10 +227,10 @@
 
 <h4 id="1-7-第三次使用explain分析"><a href="#1-7-第三次使用explain分析" class="headerlink" title="1.7 第三次使用explain分析"></a>1.7 第三次使用explain分析</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询category_id为1且comments 大于 1 的所有记录,显示id,author_id,views</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span>  <span class="keyword">id</span>,author_id,views  <span class="keyword">from</span>  article</span><br><span class="line"><span class="keyword">where</span> category_id = <span class="number">1</span></span><br><span class="line"><span class="keyword">and</span> comments &gt; <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308211238886.png" alt="image-20200308211238886"></p>
+<p><img src="/image/mysql/07/070005.png" alt="image-20200308211238886"></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询category_id为1且comments 大于 1 的所有记录,显示id,author_id,views</span></span><br><span class="line"><span class="comment">-- 并且找出views查看次数最多的记录</span></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span>  <span class="keyword">id</span>,author_id,views <span class="keyword">from</span>  article</span><br><span class="line"><span class="keyword">where</span> category_id = <span class="number">1</span></span><br><span class="line"><span class="keyword">and</span> comments &gt; <span class="number">1</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> views <span class="keyword">desc</span> <span class="keyword">limit</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308211546458.png" alt="image-20200308211546458"></p>
+<p><img src="/image/mysql/07/070006.png" alt="image-20200308211546458"></p>
 <p>分析：type =ref，但是有出现了Backward index scan（反向扫描），说明创建索引的排序顺序不对，应该创建降序索引，默认为升序索引。</p>
 <h4 id="1-9-第二次删除索引"><a href="#1-9-第二次删除索引" class="headerlink" title="1.9 第二次删除索引"></a>1.9 第二次删除索引</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 删除上面创建的索引:</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">index</span> ind_art_cb <span class="keyword">on</span> article;</span><br></pre></td></tr></table></figure>
 
@@ -238,41 +238,41 @@
 
 <h4 id="1-11-第四次使用explain分析"><a href="#1-11-第四次使用explain分析" class="headerlink" title="1.11  第四次使用explain分析"></a>1.11  第四次使用explain分析</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 查询category_id为1且comments 大于 1 的所有记录,显示id,author_id,views</span><br><span class="line"></span><br><span class="line">explain select  id,author_id,views  from  article</span><br><span class="line">where category_id = 1</span><br><span class="line">and comments &gt; 1;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308212723352.png" alt="image-20200308212723352"></p>
+<p><img src="/image/mysql/07/070007.png" alt="image-20200308212723352"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-- 查询category_id为1且comments 大于 1 的所有记录,显示id,author_id,views</span><br><span class="line">-- 并且找出views查看次数最多的记录</span><br><span class="line">explain select  id,author_id,views from  article</span><br><span class="line">where category_id = 1</span><br><span class="line">and comments &gt; 1</span><br><span class="line">order by views desc limit 1;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308212746451.png" alt="image-20200308212746451"></p>
+<p><img src="/image/mysql/07/070008.png" alt="image-20200308212746451"></p>
 <p>最终终于优化好了。</p>
 <h3 id="2-两张表分析"><a href="#2-两张表分析" class="headerlink" title="2.两张表分析"></a>2.两张表分析</h3><h4 id="2-1数据准备"><a href="#2-1数据准备" class="headerlink" title="2.1数据准备"></a>2.1数据准备</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> <span class="keyword">class</span>(</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">int</span>(<span class="number">10</span>) primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">      card <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span>  <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> book(</span><br><span class="line">    bookid <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">      card <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">class</span>(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> book(card) <span class="keyword">values</span>(<span class="keyword">floor</span>(<span class="number">1</span>+<span class="keyword">rand</span>()*<span class="number">20</span>));</span><br></pre></td></tr></table></figure>
 
 <h4 id="2-2-使用explain分析LEFT-JOIN"><a href="#2-2-使用explain分析LEFT-JOIN" class="headerlink" title="2.2 使用explain分析LEFT JOIN"></a>2.2 使用explain分析LEFT JOIN</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 下面开始分析</span></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">class</span> <span class="keyword">left</span> <span class="keyword">join</span> book <span class="keyword">on</span> class.card = book.card;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308213330294.png" alt="image-20200308213330294"></p>
+<p><img src="/image/mysql/07/070009.png" alt="image-20200308213330294"></p>
 <p>  分析： type =ALL， Extra 出现了Using join buffer (Block Nested Loop)；</p>
 <h4 id="2-3-创建索引"><a href="#2-3-创建索引" class="headerlink" title="2.3 创建索引"></a>2.3 创建索引</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> X <span class="keyword">on</span> book(card);</span><br></pre></td></tr></table></figure>
 
 <h4 id="2-4-再次使用explain分析LEFT-JOIN"><a href="#2-4-再次使用explain分析LEFT-JOIN" class="headerlink" title="2.4 再次使用explain分析LEFT JOIN"></a>2.4 再次使用explain分析LEFT JOIN</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">class</span> <span class="keyword">left</span> <span class="keyword">join</span> book <span class="keyword">on</span> class.card = book.card;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308214710794.png" alt="image-20200308214710794"></p>
+<p><img src="/image/mysql/07/070010.png" alt="image-20200308214710794"></p>
 <p>分析：我们可以看到第二行的type变为了ref,rows也变小了,优化效果明显</p>
 <h4 id="2-5-使用explain分析RIGHT-JOIN"><a href="#2-5-使用explain分析RIGHT-JOIN" class="headerlink" title="2.5  使用explain分析RIGHT JOIN"></a>2.5  使用explain分析RIGHT JOIN</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">class</span> <span class="keyword">right</span> <span class="keyword">join</span> book <span class="keyword">on</span> class.card = book.card;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308215416653.png" alt="image-20200308215416653"></p>
+<p><img src="/image/mysql/07/070011.png" alt="image-20200308215416653"></p>
 <h4 id="2-6-删除索引"><a href="#2-6-删除索引" class="headerlink" title="2.6 删除索引"></a>2.6 删除索引</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">index</span> X <span class="keyword">on</span> book;</span><br></pre></td></tr></table></figure>
 
 <h4 id="2-7-创建索引"><a href="#2-7-创建索引" class="headerlink" title="2.7 创建索引"></a>2.7 创建索引</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> Y <span class="keyword">on</span> <span class="keyword">class</span>(card);</span><br></pre></td></tr></table></figure>
 
 <h4 id="2-8-再次使用explain分析RIGHT-JOIN"><a href="#2-8-再次使用explain分析RIGHT-JOIN" class="headerlink" title="2.8  再次使用explain分析RIGHT JOIN"></a>2.8  再次使用explain分析RIGHT JOIN</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">class</span> <span class="keyword">right</span> <span class="keyword">join</span> book <span class="keyword">on</span> class.card = book.card;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308220023970.png" alt="image-20200308220023970"></p>
+<p><img src="/image/mysql/07/070012.png" alt="image-20200308220023970"></p>
 <h4 id="2-9创建索引"><a href="#2-9创建索引" class="headerlink" title="2.9创建索引"></a>2.9创建索引</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> X_X <span class="keyword">on</span> book(card);</span><br></pre></td></tr></table></figure>
 
 <h4 id="2-10-第三次使用explain分析LEFT-JOIN"><a href="#2-10-第三次使用explain分析LEFT-JOIN" class="headerlink" title="2.10 第三次使用explain分析LEFT JOIN"></a>2.10 第三次使用explain分析LEFT JOIN</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">class</span> <span class="keyword">left</span> <span class="keyword">join</span> book <span class="keyword">on</span> class.card = book.card;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308220502310.png" alt="image-20200308220502310"></p>
+<p><img src="/image/mysql/07/070013.png" alt="image-20200308220502310"></p>
 <h4 id="2-11-第三次使用explain分析RIGHT-JOIN"><a href="#2-11-第三次使用explain分析RIGHT-JOIN" class="headerlink" title="2.11 第三次使用explain分析RIGHT JOIN"></a>2.11 第三次使用explain分析RIGHT JOIN</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">class</span> <span class="keyword">right</span> <span class="keyword">join</span> book <span class="keyword">on</span> class.card = book.card;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308220256898.png" alt="image-20200308220256898"></p>
+<p><img src="/image/mysql/07/070014.png" alt="image-20200308220256898"></p>
 <blockquote>
 <p>总结：在left join中，左表建立索引不起作用，虽然用到索引，但是rows条数并没有变；</p>
 <p>​            在right join中，右表建立索引不起作用，虽然用到索引，但是rows条数并没有变；</p>
@@ -288,10 +288,10 @@
 
 <h4 id="3-3-使用explain分析"><a href="#3-3-使用explain分析" class="headerlink" title="3.3 使用explain分析"></a>3.3 使用explain分析</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">class</span> <span class="keyword">left</span> <span class="keyword">join</span> book <span class="keyword">on</span> class.card = book.card <span class="keyword">left</span> <span class="keyword">join</span> phone <span class="keyword">on</span> book.card = phone.card;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image/mysql/image-20200308221753135.png" alt="image-20200308221753135"></p>
+<p><img src="/image/mysql/07/070015.png" alt="image-20200308221753135"></p>
 <h4 id="3-4-建立索引"><a href="#3-4-建立索引" class="headerlink" title="3.4  建立索引"></a>3.4  建立索引</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> Y <span class="keyword">on</span> book(card);</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> Z <span class="keyword">on</span> phone(card);</span><br></pre></td></tr></table></figure>
 
-<h4 id="3-5-再次使用explain分析"><a href="#3-5-再次使用explain分析" class="headerlink" title="3.5 再次使用explain分析"></a>3.5 再次使用explain分析</h4><p><img src="/image/mysql/image-20200308221933561.png" alt="image-20200308221933561"></p>
+<h4 id="3-5-再次使用explain分析"><a href="#3-5-再次使用explain分析" class="headerlink" title="3.5 再次使用explain分析"></a>3.5 再次使用explain分析</h4><p><img src="/image/mysql/07/070016.png" alt="image-20200308221933561"></p>
 <blockquote>
 <p>分析：后2行的type都是ref且总rows数量大大降低了,效果不错,因此索引最好是设置在需要经常查询的字段中</p>
 <p>结论：尽可能减少join语句中的循环总次数: 永远用小结果集驱动大的结果集;<br>           优先优化内层循环；<br>           保证join语句中被驱动表上的join条件字段已经创建过索引；<br>           当无法保证被驱动表的join条件字段是否有索引且内存资源充足的前提下,不要太吝惜Join Buffer的设置；</p>
@@ -583,6 +583,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
@@ -595,15 +599,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Ribbon</a>
+                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Zuul</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Config</a>
               </li>
             
             <div class="clearfix"></div>
